@@ -1,12 +1,13 @@
 module CouchClient
   class Document < Hash
-    attr_reader :error
+    attr_reader :code, :error
 
-    def initialize(body, connection)
+    def initialize(code, body, connection)
       self.merge!(body)
 
-      @connection = connection
+      @code = code
       @error = {}
+      @connection = connection
     end
 
     ["id", "rev", "attachments"].each do |method|
@@ -20,20 +21,11 @@ module CouchClient
     end
 
     def remote_doc
-      @connection.doc(self.id)
-      self
-    end
-
-    def update_doc
-    end
-
-    def update_rev
-      self.rev = remote_doc.rev
-      self
+      @connection[self.id]
     end
 
     def save
-      code, body = if self.id
+      @code, body = if self.id
         @connection.hookup.put(self.id, self)
       else
         @connection.hookup.post(self)
@@ -47,6 +39,18 @@ module CouchClient
         @error = {body["error"] => body["reason"]}
         false
       end
+    end
+
+    def design?
+      !!self.id.match(/_design\//)
+    end
+
+    def error?
+      !!self.error
+    end
+
+    def conflict?
+      !!self.error["conflict"]
     end
   end
 end

@@ -1,5 +1,3 @@
-require 'cgi'
-
 module CouchClient
   class ConnectionHandler
     attr_accessor :scheme, :username, :password, :host, :port, :database
@@ -31,7 +29,7 @@ module CouchClient
     private
     
     def encode(hash)
-      hash.to_a.map{|pair| pair.map{|p| CGI.escape(p)}.join("=")}.join("&")
+      hash.to_a.map{|pair| pair.join("=")}.join("&")
     end
   end
 end

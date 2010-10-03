@@ -31,6 +31,10 @@ module CouchClient
     def delete(path = nil, query = {})
       curl(:delete, path, query)
     end
+
+    def inspect
+      "#<#{self.class}: uri: #{@handler.uri}>"
+    end
     
     private
     
