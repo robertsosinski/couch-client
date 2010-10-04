@@ -2,7 +2,7 @@ module CouchClient
   class Document < Hash
     attr_reader :code, :error
 
-    def initialize(code, body, connection)
+    def initialize(code, body, connection, deleted = false)
       self.merge!(body)
 
       @code = code
@@ -39,6 +39,10 @@ module CouchClient
         @error = {body["error"] => body["reason"]}
         false
       end
+    end
+
+    def destroy
+      @connection.delete(self.id, self.rev)
     end
 
     def design?

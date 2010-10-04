@@ -12,12 +12,7 @@ module CouchClient
   VERSION = "0.0.1"
 
   class Error < Exception; end
-  
-  class DatabaseNotGiven < Exception; end
-  class DocumentNotValid < Exception; end
-  class DocumentNotFound < Exception; end
-  class CollectionNotFound < Exception; end
-
+    
   def self.connect(args = {}, &block)
     Connection.new(args, &block)
   end

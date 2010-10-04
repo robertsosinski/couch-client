@@ -1,5 +1,9 @@
 module CouchClient
   class Connection
+    class DatabaseNotGiven < Exception; end
+    class DocumentNotValid < Exception; end
+    class DocumentNotFound < Exception; end
+
     attr_reader :hookup
     
     def initialize(args = {})
@@ -45,10 +49,31 @@ module CouchClient
       Document.new(nil, body, self)
     end
     
-    def create(body = {})
+    def save(body = {})
       document = build(body)
       document.save
       document
+    end
+
+    def delete(id, rev)
+      code, status = @hookup.delete(id, {"rev" => rev})
+      Document.new(code, {"_id" => id, "_rev" => status["rev"]}, self, true)
+    end
+
+    def status
+      @hookup.get.last
+    end
+
+    def database_exists?
+      @hookup.get.first == 200
+    end
+
+    def create_database
+      @hookup.put.last
+    end
+
+    def delete_database!
+      @hookup.delete.last
     end
 
     def inspect

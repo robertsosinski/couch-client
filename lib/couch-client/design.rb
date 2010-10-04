@@ -1,5 +1,7 @@
 module CouchClient
   class Design
+    class CollectionNotFound < Exception; end
+
     attr_accessor :id
 
     def initialize(id, connection)
@@ -22,6 +24,10 @@ module CouchClient
       else
         raise Error.new("code: #{code}, error: #{body["error"]}, reason: #{body["reason"]}")
       end
+    end
+
+    def inspect
+      "#<#{self.class}: id: #{@id}>"
     end
   end
 end
