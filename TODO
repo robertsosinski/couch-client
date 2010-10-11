@@ -1,0 +1,11 @@
+Need
+* attachments
+* design save rake task
+* hash with indifferent access
+
+Nice
+* batch insert
+* batch update
+* show design
+* list design
+* replication

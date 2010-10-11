@@ -1,10 +1,10 @@
 module CouchClient
+  class DatabaseNotGiven < Exception; end
+  class DocumentNotValid < Exception; end
+  class DocumentNotFound < Exception; end
+  
   class Connection
-    class DatabaseNotGiven < Exception; end
-    class DocumentNotValid < Exception; end
-    class DocumentNotFound < Exception; end
-
-    attr_reader :hookup
+    attr_reader :hookup, :database
     
     def initialize(args = {})
       handler = ConnectionHandler.new
@@ -22,10 +22,11 @@ module CouchClient
       end
       
       @hookup = Hookup.new(handler)
+      @database = Database.new(self)
     end
     
-    def [](id)
-      code, body = @hookup.get(id)
+    def [](id, query = {})
+      code, body = @hookup.get(id, query)
 
       case code
       when 200
@@ -35,7 +36,12 @@ module CouchClient
           raise DocumentNotValid.new("the id '#{id}' does not correspond to a document")
         end
       when 404
-        raise DocumentNotFound.new("a document could not be found with id '#{id}'")
+        case body["reason"]
+        when "deleted"
+          raise DocumentNotFound.new("the document with id '#{id}' has been deleted")
+        else
+          raise DocumentNotFound.new("a document could not be found with id '#{id}'")
+        end
       else
         raise Error.new("code: #{code}, error: #{body["error"]}, reason: #{body["reason"]}")
       end
@@ -48,36 +54,16 @@ module CouchClient
     def build(body = {})
       Document.new(nil, body, self)
     end
-    
-    def save(body = {})
-      document = build(body)
-      document.save
-      document
-    end
-
-    def delete(id, rev)
-      code, status = @hookup.delete(id, {"rev" => rev})
-      Document.new(code, {"_id" => id, "_rev" => status["rev"]}, self, true)
-    end
-
-    def status
-      @hookup.get.last
-    end
-
-    def database_exists?
-      @hookup.get.first == 200
-    end
-
-    def create_database
-      @hookup.put.last
-    end
-
-    def delete_database!
-      @hookup.delete.last
-    end
 
     def inspect
-      "#<#{self.class}: uri: #{@hookup.handler.uri}>"
+      head = "#<#{self.class}: "
+      body = []
+      body << "username: #{@hookup.handler.username}" if @hookup.handler.username
+      body << "password: #{@hookup.handler.password}" if @hookup.handler.password
+      body << "uri: #{@hookup.handler.uri}"
+      tail = ">"
+      
+      head + body.join(", ") + tail
     end
   end
 end

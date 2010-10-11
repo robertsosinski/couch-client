@@ -1,4 +1,6 @@
 module CouchClient
+  class AttachmentError < Exception; end
+
   class Document < Hash
     attr_reader :code, :error
 
@@ -8,6 +10,13 @@ module CouchClient
       @code = code
       @error = {}
       @connection = connection
+      @deleted = deleted
+
+      if self.attachments
+        self.attachments.keys.each do |key|
+          self.attachments[key] = Attachment.new(id, key, attachments[key], @connection)
+        end
+      end
     end
 
     ["id", "rev", "attachments"].each do |method|
@@ -20,20 +29,28 @@ module CouchClient
       end
     end
 
-    def remote_doc
-      @connection[self.id]
+    def saved_doc(query = {})
+      @connection[self.id, query]
+    end
+
+    def refresh(query = {})
+      doc = @connection[self.id, query]
+      self.clear
+      self.merge!(doc)
+      self
     end
 
     def save
       @code, body = if self.id
         @connection.hookup.put(self.id, self)
       else
-        @connection.hookup.post(self)
+        @connection.hookup.post(nil, self)
       end
 
       if body["ok"]
         self.id ||= body["id"]
         self.rev  = body["rev"]
+        @deleted = false
         true
       else
         @error = {body["error"] => body["reason"]}
@@ -41,8 +58,34 @@ module CouchClient
       end
     end
 
-    def destroy
-      @connection.delete(self.id, self.rev)
+    # TODO: put has to take both queries and data
+    def attach(name, content, content_type)
+      if self.rev
+        @code, body = @connection.hookup.put("#{self.id}/#{name}", {"rev" => self.rev}, content_type)
+        
+        if body["ok"]
+          self.rev  = body["rev"]
+          true
+        else
+          @error = {body["error"] => body["reason"]}
+          false
+        end
+      else
+        raise AttachmentError.new("a document must exist before an attachment can be uploaded to it")
+      end
+    end
+
+    def delete!
+      @code, body = @connection.hookup.delete(id, {"rev" => rev})
+      
+      if body["ok"]
+        self.rev = body["rev"]
+        @deleted = true
+        true
+      else
+        @error = {body["error"] => body["reason"]}
+        false
+      end
     end
 
     def design?
@@ -55,6 +98,10 @@ module CouchClient
 
     def conflict?
       !!self.error["conflict"]
+    end
+
+    def deleted?
+      @deleted
     end
   end
 end

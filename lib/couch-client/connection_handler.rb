@@ -16,14 +16,7 @@ module CouchClient
     end
     
     def inspect
-      head = "#<#{self.class}: "
-      body = []
-      body << "username: #{@username}" if @username
-      body << "password: #{@password}" if @password
-      body << "uri: #{self.uri}"
-      tail = ">"
-      
-      head + body.join(", ") + tail
+      "#<#{self.class}>"
     end
     
     private

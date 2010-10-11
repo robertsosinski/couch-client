@@ -2,47 +2,33 @@ require 'curb'
 require 'json'
 
 module CouchClient
-  class Hookup
-    class InvalidHTTPVerb < Exception; end
-    class InvalidJSONData < Exception; end
+  class InvalidHTTPVerb < Exception; end
+  class InvalidJSONData < Exception; end
     
+  class Hookup
     attr_reader :handler
     
     def initialize(handler)
       @handler = handler
     end
     
-    def head(path = nil, query = {})
-      curl(:head, path, query)
-    end
-    
-    def get(path = nil, query = {})
-      curl(:get, path, query)
-    end
-    
-    def post(data = {})
-      curl(:post, nil, data)
-    end
-    
-    def put(path = nil, data = {})
-      curl(:put, path, data)
-    end
-    
-    def delete(path = nil, query = {})
-      curl(:delete, path, query)
+    [:head, :get, :post, :put, :delete].each do |verb|
+      define_method(verb) do |*args|
+        curl(verb, *args)
+      end
     end
 
     def inspect
-      "#<#{self.class}: uri: #{@handler.uri}>"
+      "#<#{self.class}>"
     end
     
     private
     
-    def curl(verb, path, query_data = {})
+    def curl(verb, path = nil, query_data = {}, content_type = "application/json")
       options = lambda do |easy|
         easy.headers["User-Agent"] = "couch-client v#{VERSION}"
-        easy.headers["Content-Type"] = "application/json"
-        easy.headers["Accepts"] = "application/json"
+        easy.headers["Content-Type"] = content_type
+        easy.headers["Accepts"] = content_type
         easy.username = handler.username
         easy.userpwd  = handler.password
       end
@@ -61,8 +47,10 @@ module CouchClient
       body = begin
         if easy.body_str == "" or easy.body_str.nil?
           nil
-        else
+        elsif content_type == "application/json"
           JSON.parse(easy.body_str)
+        else
+          easy.body_str
         end
       rescue
         raise InvalidJSONData.new("document received is not valid JSON")

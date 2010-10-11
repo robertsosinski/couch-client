@@ -1,7 +1,10 @@
 module CouchClient
-  class Design
-    class CollectionNotFound < Exception; end
+  class ViewNotFound < Exception; end
+  class ShowNotFound < Exception; end
+  class ListNotFound < Exception; end
+  class FullTextNotFound < Exception; end
 
+  class Design
     attr_accessor :id
 
     def initialize(id, connection)
@@ -18,11 +21,36 @@ module CouchClient
 
       case code
       when 200
-        Collection.new(code, body, self)
+        Collection.new(code, body, @connection)
       when 404
-        raise CollectionNotFound.new("a map/reduce function could not be found for design id '#{id}' and view name '#{name}'")
+        raise ViewNotFound.new("could not find view field '#{name}' for design '#{id}'")
       else
         raise Error.new("code: #{code}, error: #{body["error"]}, reason: #{body["reason"]}")
+      end
+    end
+
+    # TODO: add show method
+    def show(name, options = {})
+      raise "pending"
+    end
+
+    # TODO: add list method
+    def list(name, options = {})
+      raise "pending"
+    end
+
+    def fulltext(name, options = {})
+      code, body = @connection.hookup.get("_fti/_design/#{id}/#{name}", options)
+
+      case code
+      when 200
+        Collection.new(code, body, self)
+      else
+        if body["reason"] == "no_such_view"
+          raise FullTextNotFound.new("could not find fulltext field '#{name}' for design '#{id}'")
+        else
+          raise Error.new("code: #{code}, error: #{body["error"]}, reason: #{body["reason"]}")
+        end
       end
     end
 
