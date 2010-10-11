@@ -42,7 +42,7 @@ module CouchClient
 
     def save
       @code, body = if self.id
-        @connection.hookup.put(self.id, self)
+        @connection.hookup.put(self.id, {}, self)
       else
         @connection.hookup.post(nil, self)
       end
@@ -58,13 +58,12 @@ module CouchClient
       end
     end
 
-    # TODO: put has to take both queries and data
     def attach(name, content, content_type)
       if self.rev
-        @code, body = @connection.hookup.put("#{self.id}/#{name}", {"rev" => self.rev}, content_type)
+        @code, body = @connection.hookup.put("#{self.id}/#{name}", {"rev" => self.rev}, content, content_type)
         
         if body["ok"]
-          self.rev  = body["rev"]
+          self.rev = body["rev"]
           true
         else
           @error = {body["error"] => body["reason"]}
