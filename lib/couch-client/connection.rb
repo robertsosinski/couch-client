@@ -2,10 +2,10 @@ module CouchClient
   class DatabaseNotGiven < Exception; end
   class DocumentNotValid < Exception; end
   class DocumentNotFound < Exception; end
-  
+
   class Connection
     attr_reader :hookup, :database
-    
+
     def initialize(args = {})
       handler = ConnectionHandler.new
       
@@ -24,7 +24,7 @@ module CouchClient
       @hookup = Hookup.new(handler)
       @database = Database.new(self)
     end
-    
+
     def [](id, query = {})
       code, body = @hookup.get(id, query)
 
@@ -62,7 +62,7 @@ module CouchClient
       body << "password: #{@hookup.handler.password}" if @hookup.handler.password
       body << "uri: #{@hookup.handler.uri}"
       tail = ">"
-      
+
       head + body.join(", ") + tail
     end
   end

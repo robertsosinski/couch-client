@@ -15,7 +15,7 @@ module CouchClient
     end
 
     def path
-      "/#{@connection.hookup.handler.database}/#{@id}/#{@name}"
+      @connection.hookup.handler.path("#{@id}/#{@name}")
     end
 
     def uri

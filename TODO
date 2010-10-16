@@ -5,6 +5,8 @@ Need
 Nice
 * batch insert
 * batch update
+* batch delete
+* batch upload
 * show design
 * list design
 * replication

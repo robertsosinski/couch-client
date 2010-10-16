@@ -4,14 +4,14 @@ require 'json'
 module CouchClient
   class InvalidHTTPVerb < Exception; end
   class InvalidJSONData < Exception; end
-    
+
   class Hookup
     attr_reader :handler
-    
+
     def initialize(handler)
       @handler = handler
     end
-    
+
     [:head, :get, :delete].each do |verb|
       define_method(verb) do |*args|
         params = [verb, args.shift, args.shift, nil]
@@ -53,16 +53,16 @@ module CouchClient
       
       code = easy.response_code
       
-      body = begin
-        if easy.body_str == "" or easy.body_str.nil?
-          nil
-        elsif content_type == "application/json" || [:post, :put, :delete].include?(verb)
+      body = if easy.body_str == "" or easy.body_str.nil?
+        nil
+      elsif content_type == "application/json" || [:post, :put, :delete].include?(verb)
+        begin
           JSON.parse(easy.body_str)
-        else
-          easy.body_str
+        rescue
+          raise InvalidJSONData.new("document received is not valid JSON")
         end
-      rescue
-        raise InvalidJSONData.new("document received is not valid JSON")
+      else
+        easy.body_str
       end
       
       [code, body]

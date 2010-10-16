@@ -44,7 +44,7 @@ module CouchClient
       @code, body = if self.id
         @connection.hookup.put(self.id, {}, self)
       else
-        @connection.hookup.post(nil, self)
+        @connection.hookup.post(nil, {}, self)
       end
 
       if body["ok"]
