@@ -44,7 +44,12 @@ module CouchClient
 
       case code
       when 200
-        Collection.new(code, body, self)
+        if body["rows"]
+          Collection.new(code, body, self)
+        # when no `q` parameter is given, couch-lucene will return a status hash
+        else
+          body
+        end
       else
         if body["reason"] == "no_such_view"
           raise FullTextNotFound.new("could not find fulltext field '#{name}' for design '#{id}'")
