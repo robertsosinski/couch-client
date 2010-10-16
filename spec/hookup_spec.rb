@@ -1,4 +1,5 @@
 require File.join(File.dirname(File.expand_path(__FILE__)), "spec_helper")
+require 'digest/sha1'
 
 describe CouchClient::Hookup do
   before(:all) do
@@ -85,6 +86,37 @@ describe CouchClient::Hookup do
       it 'should delete the database when not given a path' do
         @hookup.delete.should eql([200, {"ok" => true}])
       end
+    end
+  end
+  
+  describe 'attachments' do
+    before(:all) do
+      @read = lambda do |file|
+        File.read(File.join(File.dirname(__FILE__), "files", file))
+      end
+      
+      @digest = lambda do |file|
+        Digest::SHA1.hexdigest(file)
+      end
+      
+      @plain = @read.call("plain.txt")
+      @image = @read.call("image.png")
+      
+      @plain_digest = @digest.call(@plain)
+      @image_digest = @digest.call(@image)
+      
+      @hookup.put
+      @rev = @hookup.put("greg", {}, {"name" => "greg", "city" => "austin"}).last["rev"]
+    end
+    
+    it 'can be uploaded' do
+      @rev = @hookup.put("greg/plain.txt", {"rev" => @rev}, @plain, "text/plain").last["rev"]
+      @rev = @hookup.put("greg/image.png", {"rev" => @rev}, @image, "image/png").last["rev"]
+    end
+    
+    it 'can be downloaded' do
+      @digest.call(@hookup.get("greg/plain.txt", {}, "text/plain").last).should eql(@plain_digest)
+      @digest.call(@hookup.get("greg/image.png", {}, "image/png").last).should eql(@image_digest)
     end
   end
 end
