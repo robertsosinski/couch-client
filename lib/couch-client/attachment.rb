@@ -11,15 +11,15 @@ module CouchClient
     end
 
     def file
-      @connection.hookup.get("#{@id}/#{@name}", {}, self["content_type"]).last
+      @connection.hookup.get([@id, @name], {}, self["content_type"]).last
     end
 
     def path
-      @connection.hookup.handler.path("#{@id}/#{@name}")
+      @connection.hookup.handler.path([@id, @name])
     end
 
     def uri
-      @connection.hookup.handler.uri("#{@id}/#{@name}")
+      @connection.hookup.handler.uri([@id, @name])
     end
   end
 end

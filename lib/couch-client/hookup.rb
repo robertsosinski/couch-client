@@ -5,10 +5,10 @@ module CouchClient
   class InvalidHTTPVerb < Exception; end
   class InvalidJSONData < Exception; end
 
-  # The Hookup is the basic HTTP interface that connects CouchClient to the CouchDB.
+  # The Hookup is the basic HTTP interface that connects CouchClient to CouchDB.
   # Hookup can use any HTTP library if the conventions listed below are followed.
   #
-  # Hookup only has `head`, `get`, `post`, `put` and `delete` public methods.
+  # If modified, Hookup must have head, get, post, put and delete instance methods.
   class Hookup
     attr_reader :handler
     
@@ -62,7 +62,7 @@ module CouchClient
     
     # This is the method that actually makes the curl request for each verb listed above.
     def curl(verb, path = nil, query = nil, data = {}, content_type = "application/json")
-      # setup curb options block
+      # Setup curb options block
       options = lambda do |easy|
         easy.headers["User-Agent"] = "couch-client v#{VERSION}"
         easy.headers["Content-Type"] = content_type if content_type
