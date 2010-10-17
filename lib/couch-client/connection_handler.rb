@@ -9,7 +9,9 @@ module CouchClient
   # can be wrote and read using getter and setter syntax.
   class ConnectionHandler
     attr_accessor :scheme, :username, :password, :host, :port, :database
-
+    
+    # ConnectionHandler is constructed without any parameters, and with defaults
+    # for scheme, host and port.  Other settings are set via the accessors above.
     def initialize
       @scheme = "http"
       @host = "localhost"
@@ -22,7 +24,12 @@ module CouchClient
       str += path(path_obj, query_obj)
       str
     end
-
+    
+    # TODO: There will be some touble with how CouchDB handles slashes.
+    # If the document id is a design, it can have a slash,  All sections
+    # of a path can have slashes, however document ids must have the slash
+    # replaced with a %2F.
+    
     # Creates a properly formed ath that can be used by a HTTP library.
     def path(path_obj = nil, query_obj = nil)
       # A path_obj can be an Array, String or NilClass

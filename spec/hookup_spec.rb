@@ -4,7 +4,7 @@ require 'digest/sha1'
 describe CouchClient::Hookup do
   before(:all) do
     handler = CouchClient::ConnectionHandler.new
-    handler.database = "couch-client_test"
+    handler.database = COUCHDB_TEST_DATABASE
     
     @hookup = CouchClient::Hookup.new(handler)
   end

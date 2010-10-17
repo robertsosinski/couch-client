@@ -92,11 +92,19 @@ module CouchClient
     end
 
     def error?
-      !!self.error
+      !@error.empty?
+    end
+    
+    def valid?
+      !(@code == 403 && @error["forbidden"])
+    end
+    
+    def invalid?
+      !valid?
     end
 
     def conflict?
-      !!self.error["conflict"]
+      !!@error["conflict"]
     end
 
     def deleted?

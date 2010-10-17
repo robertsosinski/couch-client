@@ -13,7 +13,7 @@ module CouchClient
     attr_reader :handler
     
     # Hookup is constructed with a connection handler, which formats the 
-    # proper URIs with domains, authentication settings and query strings.
+    # proper URIs with a domain, authentication, path and query string.
     def initialize(handler)
       @handler = handler
     end
@@ -22,13 +22,13 @@ module CouchClient
     #   hookup.verb("path", {"query_key" => "query_value"}, "content/type")
     #
     # And has the following response
-    # [code, {"data_key" => "data_value"}]
+    #   [code, {"data_key" => "data_value"}]
     #
     # Except if the verb is `head`, which has the following response
-    # [code, nil]
+    #   [code, nil]
     #
     # Or if the verb is `get` and content_type is not "application/json", which has the following response
-    # [code, "string containing file data"]
+    #   [code, "string containing file data"]
     #
     # By default path is nil, query is nil, and content_type is "application/json"
     [:head, :get, :delete].each do |verb|
@@ -45,7 +45,7 @@ module CouchClient
     #   hookup.verb("path", {"query_key" => "query_value"}, {"data_key" => "data_value"}, "content/type")
     #
     # And has the following response
-    # [code, {"data_key" => "data_value"}]
+    #   [code, {"data_key" => "data_value"}]
     #
     # By default path is nil, query is nil, data is {} and content_type is "application/json"
     [:post, :put].each do |verb|
@@ -60,7 +60,7 @@ module CouchClient
     
     private
     
-    # This is the method that actually makes the curl request for each verb listed above.
+    # This is the method that actually makes curl request for each verb method listed above.
     def curl(verb, path = nil, query = nil, data = {}, content_type = "application/json")
       # Setup curb options block
       options = lambda do |easy|
