@@ -1,5 +1,6 @@
 module CouchClient
   class AttachmentError < Exception; end
+  class InvalidId < Exception; end
 
   class Document < Hash
     attr_reader :code, :error
@@ -28,7 +29,7 @@ module CouchClient
         self["_#{method}"] = value
       end
     end
-
+    
     def saved_doc(query = {})
       @connection[self.id, query]
     end
@@ -41,6 +42,11 @@ module CouchClient
     end
 
     def save
+      # Ensure that "_id" is a String if it is defined.
+      if self.key?("_id") && !self["_id"].is_a?(String)
+        raise InvalidId.new("document _id must be a String")
+      end
+      
       @code, body = if self.id
         @connection.hookup.put(self.id, {}, self)
       else

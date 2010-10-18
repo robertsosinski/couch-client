@@ -35,7 +35,7 @@ module CouchClient
       # A path_obj can be an Array, String or NilClass
       path_str = case path_obj
       when Array
-        # If an Array, escape each object and join with a "/"
+        # If an Array, stringify and escape each object and join with a "/"
         path_obj.map{|p| CGI.escape(p.to_s)}.join("/")
       when String
         # If a String, escape it without escaping "/" characters
@@ -45,14 +45,14 @@ module CouchClient
         ""
       else
         # Else, raise an error
-        raise InvaliPathObject.new("path must be of type 'Array', 'String' or 'NilClass', not of type '#{path_obj.class}'")
+        raise InvalidPathObject.new("path must be of type 'Array', 'String' or 'NilClass', not of type '#{path_obj.class}'")
       end
       
       # A query_obj can be a Hash or NilClass
       query_str = case query_obj
       when Hash
-        # If a Hash, escape each object, join each key/value with a "=" and each pair with a "&"
-        query_obj.to_a.map{|q| q.map{|r| CGI.escape(r)}.join("=")}.join("&")
+        # If a Hash, stringify and escape each object, join each key/value with a "=" and each pair with a "&"
+        query_obj.to_a.map{|q| q.map{|r| CGI.escape(r.to_s)}.join("=")}.join("&")
       when NilClass
         # If a NilClass, make an empty string
         ""
