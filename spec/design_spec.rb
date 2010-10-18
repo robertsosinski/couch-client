@@ -77,6 +77,14 @@ describe CouchClient::Connection do
     end
   end
   
+  describe '#show' do
+    pending 'will be built in another release'
+  end
+  
+  describe '#list' do
+    pending 'will be built in another release'
+  end
+  
   describe '#fulltext' do
     it 'should return a lucine status hash if the fulltext exists' do
       @people.fulltext("by_name").should be_a(Hash)
