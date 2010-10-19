@@ -25,27 +25,19 @@ module CouchClient
       str
     end
     
-    # TODO: There will be some touble with how CouchDB handles slashes.
-    # If the document id is a design, it can have a slash,  All sections
-    # of a path can have slashes, however document ids must have the slash
-    # replaced with a %2F.
-    
-    # Creates a properly formed ath that can be used by a HTTP library.
+    # Creates a properly formed path that can be used by a HTTP library.
     def path(path_obj = nil, query_obj = nil)
       # A path_obj can be an Array, String or NilClass
       path_str = case path_obj
       when Array
-        # If an Array, stringify and escape each object and join with a "/"
-        path_obj.map{|p| CGI.escape(p.to_s)}.join("/")
-      when String
-        # If a String, escape it without escaping "/" characters
-        CGI.escape(path_obj).gsub("%2F", "/")
+        # If an Array, stringify and escape (unless it is a design document) each object and join with a "/"
+        path_obj.map.with_index{|p, i| (i == 0 && p.to_s.match(/_design\//)) ? p.to_s : CGI.escape(p.to_s)}.join("/")
       when NilClass
         # If a NilClass, make an empty string
         ""
       else
         # Else, raise an error
-        raise InvalidPathObject.new("path must be of type 'Array', 'String' or 'NilClass', not of type '#{path_obj.class}'")
+        raise InvalidPathObject.new("path must be of type 'Array', or 'NilClass', not of type '#{path_obj.class}'")
       end
       
       # A query_obj can be a Hash or NilClass

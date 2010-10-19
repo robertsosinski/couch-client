@@ -19,7 +19,7 @@ module CouchClient
     end
     
     # Hookup#(head|get|delete) has the following method signature
-    #   hookup.verb("path", {"query_key" => "query_value"}, "content/type")
+    #   hookup.verb(["path", "name"], {"query_key" => "query_value"}, "content/type")
     #
     # And has the following response
     #   [code, {"data_key" => "data_value"}]
@@ -42,7 +42,7 @@ module CouchClient
     end
     
     # Hookup#(post|put) has the following method signature
-    #   hookup.verb("path", {"query_key" => "query_value"}, {"data_key" => "data_value"}, "content/type")
+    #   hookup.verb(["path", "name"], {"query_key" => "query_value"}, {"data_key" => "data_value"}, "content/type")
     #
     # And has the following response
     #   [code, {"data_key" => "data_value"}]

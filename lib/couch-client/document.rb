@@ -48,7 +48,7 @@ module CouchClient
       end
       
       @code, body = if self.id
-        @connection.hookup.put(self.id, {}, self)
+        @connection.hookup.put([self.id], {}, self)
       else
         @connection.hookup.post(nil, {}, self)
       end
@@ -66,7 +66,7 @@ module CouchClient
 
     def attach(name, content, content_type)
       if self.rev
-        @code, body = @connection.hookup.put("#{self.id}/#{name}", {"rev" => self.rev}, content, content_type)
+        @code, body = @connection.hookup.put([self.id, name], {"rev" => self.rev}, content, content_type)
         
         if body["ok"]
           self.rev = body["rev"]
@@ -81,7 +81,7 @@ module CouchClient
     end
 
     def delete!
-      @code, body = @connection.hookup.delete(id, {"rev" => rev})
+      @code, body = @connection.hookup.delete([id], {"rev" => rev})
       
       if body["ok"]
         self.rev = body["rev"]

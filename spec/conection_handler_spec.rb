@@ -38,14 +38,11 @@ describe CouchClient::ConnectionHandler do
   end
   
   it 'should output a uri string with a path if passed a path' do
-    @ch.uri("path").should eql("https://couchone.com:8080/sandbox/path")
-    @ch.uri("path", {}).should eql("https://couchone.com:8080/sandbox/path")
-    @ch.uri("_$,+-/").should eql("https://couchone.com:8080/sandbox/_%24%2C%2B-/")
-    @ch.uri("?=&; #").should eql("https://couchone.com:8080/sandbox/%3F%3D%26%3B+%23")
-  end
-  
-  it 'shoudl output a uri string wiht a path if the path is passed as an array with special characters' do
-    @ch.uri(["_d*s!gn", "spaces & special/chars"]).should eql("https://couchone.com:8080/sandbox/_d%2As%21gn/spaces+%26+special%2Fchars")
+    @ch.uri(["path"]).should eql("https://couchone.com:8080/sandbox/path")
+    @ch.uri(["path"], {}).should eql("https://couchone.com:8080/sandbox/path")
+    @ch.uri(["_$,+-/"]).should eql("https://couchone.com:8080/sandbox/_%24%2C%2B-%2F")
+    @ch.uri(["?=&; #"]).should eql("https://couchone.com:8080/sandbox/%3F%3D%26%3B+%23")
+    @ch.uri(["_design/test", "spaces & special/chars"]).should eql("https://couchone.com:8080/sandbox/_design/test/spaces+%26+special%2Fchars")
   end
   
   it 'should output a uri string with a query if a query is given' do
@@ -55,6 +52,6 @@ describe CouchClient::ConnectionHandler do
   end
   
   it 'should output a uri string with path and query if both are given' do
-    @ch.uri("path", {"a" => "apple", "b" => "banana"}).should eql("https://couchone.com:8080/sandbox/path?a=apple&b=banana")
+    @ch.uri(["path", "one", "two"], {"a" => "apple", "b" => "banana"}).should eql("https://couchone.com:8080/sandbox/path/one/two?a=apple&b=banana")
   end
 end

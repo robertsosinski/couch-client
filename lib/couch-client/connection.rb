@@ -33,11 +33,11 @@ module CouchClient
       @database = Database.new(self)
     end
 
-    # `[]` is used to fetch documents from the CouchDB server. Although `[]` makes get requests
-    # and therefore could fetch design views and more, anything received that is not a valid
-    # document will raise an error.  As such, fetching designs can only be done through `design`.
-    def [](id, query = {})
-      code, body = @hookup.get(id, query)
+    # Fetches documents from the CouchDB server. Although `[]` makes get requests and therefore
+    # could fetch design views and more, anything received that is not a valid document will
+    # raise an error.  As such, fetching designs can only be done through the `design` method.
+    def [](id, options = {})
+      code, body = @hookup.get([id], options)
 
       case code
       # If something was found
@@ -67,13 +67,24 @@ module CouchClient
       end
     end
 
-    # `design` constructs a new design factory that manages `views`, `shows`, `lists` and `fulltext` searches.
+    # Constructs a new design factory that manages `views`, `shows`, `lists` and `fulltext` searches.
     def design(id)
       Design.new(id, self)
     end
     
-    # `build` is the interface used to construct new CouchDB documents.  Once
-    # constructed, these documents can be saved, updated, validated and deleted.
+    # Acts as the interface to CouchDB's `_all_docs` map view.
+    def all_docs(options = {})
+      # key, startkey and endkey must be JSON encoded
+      ["key", "startkey", "endkey"].each do |key|
+        options[key] &&= options[key].to_json
+      end
+      
+      # Create a new Collection and pass the response code, body and connection.
+      Collection.new(*@hookup.get(["_all_docs"], options), self)
+    end
+    
+    # Is the interface used to construct new CouchDB documents.  Once constructed
+    # these documents can be saved, updated, validated, refreshed and deleted.
     def build(body = {})
       Document.new(nil, body, self)
     end

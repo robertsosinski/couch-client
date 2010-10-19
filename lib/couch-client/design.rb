@@ -16,7 +16,7 @@ module CouchClient
       @connection = connection
     end
 
-    # `view` makes requests to the server that return mappped/reduced collections.
+    # Makes requests to the server that return mappped/reduced view collections.
     def view(name, options = {})
       # key, startkey and endkey must be JSON encoded
       ["key", "startkey", "endkey"].each do |key|
@@ -47,7 +47,8 @@ module CouchClient
     def list(name, options = {})
       raise "pending"
     end
-
+    
+    # Makes requests to the server that return lucene search results.
     def fulltext(name, options = {})
       code, body = @connection.hookup.get(["_fti", "_design", id, name], options)
 
