@@ -1,7 +1,8 @@
 module CouchClient
   class InvalidId < Exception; end
   class AttachmentError < Exception; end
-
+  class DocumentNotAvailable < Exception; end
+  
   class Document < Hash
     attr_reader :code, :error
 
@@ -31,14 +32,11 @@ module CouchClient
     end
     
     def saved_doc(query = {})
-      @connection[self.id, query]
-    end
-
-    def refresh(query = {})
-      doc = @connection[self.id, query]
-      self.clear
-      self.merge!(doc)
-      self
+      if new?
+        raise DocumentNotAvailable.new('this document is new and therefore has not been saved yet')
+      else
+        @connection[self.id, query]
+      end
     end
 
     def save
@@ -48,9 +46,9 @@ module CouchClient
       end
       
       @code, body = if self.id
-        @connection.hookup.put([self.id], {}, self)
+        @connection.hookup.put([self.id], nil, self)
       else
-        @connection.hookup.post(nil, {}, self)
+        @connection.hookup.post(nil, nil, self)
       end
 
       if body["ok"]
@@ -95,6 +93,10 @@ module CouchClient
 
     def design?
       !!self.id.match(/_design\//)
+    end
+    
+    def new?
+      !rev
     end
 
     def error?

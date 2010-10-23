@@ -11,7 +11,7 @@ module CouchClient
     end
 
     def file
-      @connection.hookup.get([@id, @name], {}, self["content_type"]).last
+      @connection.hookup.get([@id, @name], nil, self["content_type"]).last
     end
 
     def path

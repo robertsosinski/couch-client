@@ -39,7 +39,7 @@ describe CouchClient::ConnectionHandler do
   
   it 'should output a uri string with a path if passed a path' do
     @ch.uri(["path"]).should eql("https://couchone.com:8080/sandbox/path")
-    @ch.uri(["path"], {}).should eql("https://couchone.com:8080/sandbox/path")
+    @ch.uri(["path"], nil).should eql("https://couchone.com:8080/sandbox/path")
     @ch.uri(["_$,+-/"]).should eql("https://couchone.com:8080/sandbox/_%24%2C%2B-%2F")
     @ch.uri(["?=&; #"]).should eql("https://couchone.com:8080/sandbox/%3F%3D%26%3B+%23")
     @ch.uri(["_design/test", "spaces & special/chars"]).should eql("https://couchone.com:8080/sandbox/_design/test/spaces+%26+special%2Fchars")

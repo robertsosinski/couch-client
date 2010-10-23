@@ -28,7 +28,7 @@ describe CouchClient::Hookup do
       end
 
       it 'should create a document with fields if a path with data is provided' do
-        @hookup.put(["bob"], {}, {"name" => "bob", "city" => "nyc"}).should eql([201, {"ok" => true, "id" => "bob", "rev" => "1-fb4ceea745e7c1cd487886f06eba6536"}])
+        @hookup.put(["bob"], nil, {"name" => "bob", "city" => "nyc"}).should eql([201, {"ok" => true, "id" => "bob", "rev" => "1-fb4ceea745e7c1cd487886f06eba6536"}])
       end
     end
     
@@ -38,7 +38,7 @@ describe CouchClient::Hookup do
       end
       
       it 'should create a document' do
-        code, body = @hookup.post(nil, {}, {"name" => "charlie"})
+        code, body = @hookup.post(nil, nil, {"name" => "charlie"})
         code.should eql(201)
         body.should be_a(Hash)
       end
@@ -47,8 +47,8 @@ describe CouchClient::Hookup do
     describe 'get and head' do
       before(:all) do
         @hookup.put
-        @hookup.put(["dave"], {}, {"name" => "dave", "city" => "chicago"})
-        @id = @hookup.post(nil, {}, {"name" => "edgar", "city" => "miami"}).last["id"]
+        @hookup.put(["dave"], nil, {"name" => "dave", "city" => "chicago"})
+        @id = @hookup.post(nil, nil, {"name" => "edgar", "city" => "miami"}).last["id"]
       end
       
       it 'should get database information when not given a path' do
@@ -76,7 +76,7 @@ describe CouchClient::Hookup do
     describe 'delete' do
       before(:all) do
         @hookup.put
-        @rev = @hookup.put(["fred"], {}, {"name" => "fred", "city" => "san fran"}).last["rev"]
+        @rev = @hookup.put(["fred"], nil, {"name" => "fred", "city" => "san fran"}).last["rev"]
       end
       
       it 'should delete a document when given a path' do
@@ -106,7 +106,7 @@ describe CouchClient::Hookup do
       @image_digest = @digest.call(@image)
       
       @hookup.put
-      @rev = @hookup.put(["greg"], {}, {"name" => "greg", "city" => "austin"}).last["rev"]
+      @rev = @hookup.put(["greg"], nil, {"name" => "greg", "city" => "austin"}).last["rev"]
     end
     
     it 'can be uploaded' do
@@ -115,8 +115,8 @@ describe CouchClient::Hookup do
     end
     
     it 'can be downloaded' do
-      @digest.call(@hookup.get(["greg", "plain.txt"], {}, "text/plain").last).should eql(@plain_digest)
-      @digest.call(@hookup.get(["greg", "image.png"], {}, "image/png").last).should eql(@image_digest)
+      @digest.call(@hookup.get(["greg", "plain.txt"], nil, "text/plain").last).should eql(@plain_digest)
+      @digest.call(@hookup.get(["greg", "image.png"], nil, "image/png").last).should eql(@image_digest)
     end
   end
 end
