@@ -54,4 +54,13 @@ describe CouchClient::ConnectionHandler do
   it 'should output a uri string with path and query if both are given' do
     @ch.uri(["path", "one", "two"], {"a" => "apple", "b" => "banana"}).should eql("https://couchone.com:8080/sandbox/path/one/two?a=apple&b=banana")
   end
+  
+  it 'should properly escape database urls' do
+    @ch.database = "abc123/_$()+-"
+    @ch.uri(["path"]).should eql("https://couchone.com:8080/abc123%2F_%24%28%29%2B-/path")
+  end
+  
+  it 'should raise an error if an invalid name is given' do
+    lambda{@ch.database = "ABC!@#"}.should raise_error(CouchClient::InvalidDatabaseName)
+  end
 end

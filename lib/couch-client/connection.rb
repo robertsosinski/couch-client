@@ -28,7 +28,7 @@ module CouchClient
       end
       
       # `@hookup` is used as the HTTP interface and `@database` is a namespace for all
-      # database specific commands such as datbase creation, deletion and replication.
+      # database specific commands such as creation, deletion, compaction and replication.
       @hookup = Hookup.new(handler)
       @database = Database.new(self)
     end
@@ -53,11 +53,12 @@ module CouchClient
       # If nothing was found
       when 404
         case body["reason"]
+        # Because the document was deleted
         when "deleted"
-          # Tell the user it was deleted if it was
+          # Tell the user it was deleted
           raise DocumentNotFound.new("the document with id '#{id}' has been deleted")
         else
-          # Tell the user it was never there to begin with
+          # Else tell the user it was never there to begin with
           raise DocumentNotFound.new("a document could not be found with id '#{id}'")
         end
       # If something else happened

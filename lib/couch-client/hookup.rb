@@ -24,10 +24,10 @@ module CouchClient
     # And has the following response
     #   [code, {"data_key" => "data_value"}]
     #
-    # Except if the verb is `head`, which has the following response
+    # Except, if the verb is `head`, which has the following response
     #   [code, nil]
     #
-    # Or if the verb is `get` and content_type is not "application/json", which has the following response
+    # Or, if the verb is `get` and content_type is not "application/json", which has the following response
     #   [code, "string containing file data"]
     #
     # By default path is nil, query is nil, and content_type is "application/json"
@@ -76,7 +76,7 @@ module CouchClient
         # head, get and delete http methods only take a uri string and options block
         Curl::Easy.send("http_#{verb}", handler.uri(path, query), &options)
       when :post, :put
-        # post and put http methods take a uri string, post string and options block
+        # post and put http methods take a uri string, data string and options block
         # also convert the hash into json if the content_type of the request is json
         data = data.to_json if content_type == "application/json"
         Curl::Easy.send("http_#{verb}", handler.uri(path, query), data, &options)

@@ -20,9 +20,15 @@ module CouchClient
   #
   #   CouchClient.connect(:database => "db_name")
   #
-  # or with a block:
+  # with a block:
   #
   #   CouchClient.connect do |c|
+  #     c.database = "db_name"
+  #   end
+  #
+  # or with both:
+  #
+  #   CouchClient.connect(:username => "user", :password => "pass") do |c|
   #     c.database = "db_name"
   #   end
   #

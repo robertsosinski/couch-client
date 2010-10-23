@@ -1,6 +1,6 @@
 module CouchClient
-  class AttachmentError < Exception; end
   class InvalidId < Exception; end
+  class AttachmentError < Exception; end
 
   class Document < Hash
     attr_reader :code, :error
@@ -56,7 +56,7 @@ module CouchClient
       if body["ok"]
         self.id ||= body["id"]
         self.rev  = body["rev"]
-        @deleted = false
+        @deleted  = false
         true
       else
         @error = {body["error"] => body["reason"]}
