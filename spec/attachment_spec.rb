@@ -30,6 +30,10 @@ describe CouchClient::Attachment do
     @attachment_image = @alice.saved_doc.attachments["image.png"]
   end
   
+  after(:all) do
+    @couch.database.delete!
+  end
+  
   describe '#uri' do
     it 'should yield the uri for the attachment' do
       @attachment_plain.uri.should eql([@couch.hookup.handler.uri, @alice.id, "plain.txt"].join("/"))

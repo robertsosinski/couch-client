@@ -8,7 +8,7 @@ module CouchClient
   class Document < Hash
     attr_reader :code, :error
 
-    # Document is constructed with a Hash or with a status code, response body,
+    # Document is constructed with a status code, response body,
     # connection object and a flag stating if the document is deleted.
     def initialize(code, body, connection, deleted = false)
       self.merge!(body)

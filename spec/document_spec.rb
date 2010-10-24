@@ -29,9 +29,9 @@ describe CouchClient::Document do
   end
   
   it 'should have #id=, #rev= and #attachments= methods' do
-    @alice.respond_to?(:id=).should be_true
-    @alice.respond_to?(:rev=).should be_true
-    @alice.respond_to?(:attachments=).should be_true
+    @alice.should respond_to(:id=)
+    @alice.should respond_to(:rev=)
+    @alice.should respond_to(:attachments=)
   end
   
   describe '#saved_doc' do

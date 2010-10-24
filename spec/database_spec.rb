@@ -10,7 +10,6 @@ describe CouchClient::Database do
     @couch.database.delete!
   end
   
-  
   describe '#stats' do
     it 'should exist' do
       @couch.database.stats.should be_a(Hash)
