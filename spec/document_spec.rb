@@ -109,6 +109,10 @@ describe CouchClient::Document do
       @digest.call(@alice.attachments["plain.txt"].file).should eql(@plain_digest)
       @digest.call(@alice.attachments["image.png"].file).should eql(@image_digest)
     end
+    
+    it 'should not attach a file to a new record' do
+      lambda{@new.attach("plain.txt", @plain, "text/plain")}.should raise_error(CouchClient::AttachmentError)
+    end
   end
   
   describe '#delete!' do
@@ -117,6 +121,19 @@ describe CouchClient::Document do
       @bob.delete!
       @bob.deleted?.should be_true
       lambda{@bob.saved_doc}.should raise_error(CouchClient::DocumentNotFound)
+    end
+    
+    it 'should not delete a document in conflict' do
+      @alice_old = @alice.saved_doc
+      @alice_old["old"] = true
+      @alice["key"] = "value"
+      
+      @alice.save
+      
+      @alice_old.delete!
+      @alice_old.error?.should be_true
+      @alice_old.conflict?.should be_true
+      @alice_old.error.should eql({"conflict"=>"Document update conflict."})
     end
   end
   
@@ -155,6 +172,17 @@ describe CouchClient::Document do
       @alice_old.error?.should be_true
       @alice_old.error.should eql({"conflict"=>"Document update conflict."})
       @alice_old.conflict?.should be_true
+    end
+  end
+  
+  describe '#invalid?' do
+    before(:each) do
+      @alice.instance_variable_set(:@code, 403)
+      @alice.instance_variable_set(:@error, {"forbidden" => "Document must have a name field."})
+    end
+    
+    it 'should identify an invalid document' do
+      @alice.invalid?.should be_true
     end
   end
 
