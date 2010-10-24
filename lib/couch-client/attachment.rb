@@ -1,7 +1,11 @@
 module CouchClient
+  # The Attachment is an extended Hash that provides additional methods to
+  # interact with attached files saved within a document.
   class Attachment < Hash
     attr_reader :name
 
+    # Attachment is constructed the id of the document it is attached to,
+    # the filename, file stub and connection object.
     def initialize(id, name, stub, connection)
       self.merge!(stub)
 
@@ -9,17 +13,20 @@ module CouchClient
       @name = name
       @connection = connection
     end
-
-    def file
-      @connection.hookup.get([@id, @name], nil, self["content_type"]).last
-    end
-
+    
+    # Returns the path for the attachment
     def path
       @connection.hookup.handler.path([@id, @name])
     end
 
+    # Returns the uri for the attachment
     def uri
       @connection.hookup.handler.uri([@id, @name])
+    end
+
+    # Returns a string that contains file data
+    def file
+      @connection.hookup.get([@id, @name], nil, self["content_type"]).last
     end
   end
 end
