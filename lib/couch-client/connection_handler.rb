@@ -38,10 +38,10 @@ module CouchClient
     # Creates a properly formed path that can be used by a HTTP library.
     # `path_obj` can be an Array or NilClass, `query_obj` can be Hash or NilClass.
     def path(path_obj = nil, query_obj = nil)
-      path_obj ||= []
+      path_obj  ||= []
+      query_obj ||= {}
       
-      path_str = case path_obj
-      when Array
+      path_str = if path_obj.is_a?(Array)
         # If an Array, stringify and escape (unless it is a design document) each object and join with a "/"
         ([@database] + path_obj).map{|p| p.to_s.match(/_design\//) ? p.to_s : CGI.escape(p.to_s)}.join("/")
       else
@@ -49,13 +49,9 @@ module CouchClient
         raise InvalidPathObject.new("path must be of type 'Array' not of type '#{path_obj.class}'")
       end
       
-      query_str = case query_obj
-      when Hash
+      query_str = if query_obj.is_a?(Hash)
         # If a Hash, stringify and escape each object, join each key/value with a "=" and each pair with a "&"
         query_obj.to_a.map{|q| q.map{|r| CGI.escape(r.to_s)}.join("=")}.join("&")
-      when NilClass
-        # If a NilClass, make an empty string
-        ""
       else
         # Else, raise an error
         raise InvalidQueryObject.new("path must be of type 'Hash' or 'NilClass' not of type '#{query_obj.class}'")

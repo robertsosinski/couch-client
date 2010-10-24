@@ -9,7 +9,7 @@ module CouchClient
     attr_reader :code, :error
 
     # Document is constructed with a status code, response body,
-    # connection object and a flag stating if the document is deleted.
+    # connection object and a flag stating if the document has been deleted.
     def initialize(code, body, connection, deleted = false)
       self.merge!(body)
 
