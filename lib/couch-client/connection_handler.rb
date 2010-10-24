@@ -9,7 +9,7 @@ module CouchClient
   # specifying sensible defaults for CouchDB.  Once initialized, parameters
   # can be wrote and read using getter and setter syntax.
   class ConnectionHandler
-    attr_accessor :scheme, :username, :password, :host, :port
+    attr_accessor :scheme, :username, :password, :host, :port, :check_for_symbols
     attr_reader :database
     
     # ConnectionHandler is constructed without any parameters, and with defaults
@@ -18,6 +18,7 @@ module CouchClient
       @scheme = "http"
       @host = "localhost"
       @port = 5984
+      @check_for_symbols = false
     end
     
     def database=(database)

@@ -119,4 +119,14 @@ describe CouchClient::Hookup do
       @digest.call(@hookup.get(["greg", "image.png"], nil, "image/png").last).should eql(@image_digest)
     end
   end
+  
+  describe 'symbol checking' do
+    before(:each) do
+      @hookup.handler.check_for_symbols = true
+    end
+    
+    it 'should raise an error if symbols are used in a key or value' do
+      lambda{@hookup.post(nil, nil, {:a => "apple", "b" => {"ba" => "banana", :bl => "blueberry"}})}.should raise_error(CouchClient::SymbolUsedInField)
+    end
+  end
 end

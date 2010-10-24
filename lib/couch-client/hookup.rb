@@ -4,6 +4,7 @@ require 'json'
 module CouchClient
   class InvalidHTTPVerb < Exception; end
   class InvalidJSONData < Exception; end
+  class SymbolUsedInField < Exception; end
 
   # The Hookup is the basic HTTP interface that connects CouchClient to CouchDB.
   # Hookup can use any HTTP library if the conventions listed below are followed.
@@ -78,7 +79,12 @@ module CouchClient
       when :post, :put
         # post and put http methods take a uri string, data string and options block
         # also convert the hash into json if the content_type of the request is json
-        data = data.to_json if content_type == "application/json"
+        if content_type == "application/json"
+          # Check that Symbols are not used in fields for keys or values, but only of check_for_symbols is enabled.
+          check_for_symbols(data) and self.send(:remove_instance_variable, :@payload) if @handler.check_for_symbols
+          data = data.to_json
+        end
+        
         Curl::Easy.send("http_#{verb}", handler.uri(path, query), data, &options)
       else
         raise InvalidHTTPVerb.new("only `head`, `get`, `post`, `put` and `delete` are supported")
@@ -101,6 +107,22 @@ module CouchClient
       end
       
       [code, body]
+    end
+    
+    # This method recursively traverses the document to ensure that keys or values are
+    # not Symbols, as CouchDB will save both to the database and cause data collisions.
+    def check_for_symbols(field)
+      @payload ||= field
+      
+      field.each_pair do |key, val|
+        [key, val].each do |obj|
+          if obj.is_a?(Symbol)
+            raise SymbolUsedInField.new("For Document '#{@payload}', in field '#{{key => val}}', '#{obj}' is a Symbol")
+          end
+        end
+
+        check_for_symbols(val) if val.is_a?(Hash)
+      end
     end
   end
 end
