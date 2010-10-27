@@ -20,6 +20,7 @@ module CouchClient
       @port = 5984
     end
     
+    # Sets the database and ensures that it follows proper naming conventions.
     def database=(database)
       if database.match(/^[a-z0-9_$()+-\/]+$/)
         @database = database
