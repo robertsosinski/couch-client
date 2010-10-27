@@ -3,11 +3,15 @@ $:.unshift(File.dirname(File.expand_path(__FILE__)))
 # The CouchClient module is the overall container of all CouchClient logic.
 module CouchClient
   begin
+    # Require HashWithIndifferentAccess gem if available.
     require 'active_support/hash_with_indifferent_access'
     class Hash < ActiveSupport::HashWithIndifferentAccess
       private
+      
+      # Patching `convert_value` method, else it will absorb all "Hashlike"
+      # objects and convert them into a HashWithIndifferentAccess object.
       def convert_value(value)
-        if value.instance_of?(::Hash)
+        if value.instance_of?(::Hash) # specifying Ruby's Hash, not CouchClient's Hash
           self.class.new_from_hash_copying_default(value)
         elsif value.instance_of?(Array)
           value.collect { |e| e.instance_of?(::Hash) ? self.class.new_from_hash_copying_default(e) : e }
@@ -17,6 +21,7 @@ module CouchClient
       end
     end
   rescue LoadError
+    # If HashWithIndifferentAccess is not available, use Hash.
     class Hash < ::Hash; end
   end
   
