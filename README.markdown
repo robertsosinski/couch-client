@@ -42,7 +42,7 @@ Fetching a Document
     person = Couch["a3b556796203eab59c31fa21b00043e3"]
     
     # You can also pass options if desired
-    person = Couch["a3b556796203eab59c31fa21b00043e3", "include_docs" => true]
+    person = Couch["a3b556796203eab59c31fa21b00043e3", :include_docs => true]
 
 Getting a Document's id, rev and attachments
 --------------------------------------------

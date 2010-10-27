@@ -1,17 +1,36 @@
 $:.unshift(File.dirname(File.expand_path(__FILE__)))
 
-require 'couch-client/connection'
-require 'couch-client/connection_handler'
-require 'couch-client/hookup'
-require 'couch-client/database'
-require 'couch-client/document'
-require 'couch-client/attachment'
-require 'couch-client/design'
-require 'couch-client/collection'
-require 'couch-client/row'
-
 # The CouchClient module is the overall container of all CouchClient logic.
 module CouchClient
+  begin
+    require 'active_support/hash_with_indifferent_access'
+    class Hash < ActiveSupport::HashWithIndifferentAccess
+      private
+      def convert_value(value)
+        if value.instance_of?(::Hash)
+          self.class.new_from_hash_copying_default(value)
+        elsif value.instance_of?(Array)
+          value.collect { |e| e.instance_of?(::Hash) ? self.class.new_from_hash_copying_default(e) : e }
+        else
+          value
+        end
+      end
+    end
+  rescue LoadError
+    class Hash < ::Hash; end
+  end
+  
+  require 'couch-client/connection'
+  require 'couch-client/connection_handler'
+  require 'couch-client/hookup'
+  require 'couch-client/database'
+  require 'couch-client/document'
+  require 'couch-client/attachment_list'
+  require 'couch-client/attachment'
+  require 'couch-client/design'
+  require 'couch-client/collection'
+  require 'couch-client/row'
+  
   VERSION = "0.0.1"
 
   class Error < Exception; end

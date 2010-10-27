@@ -19,6 +19,8 @@ module CouchClient
       @deleted = deleted
 
       if self.attachments
+        self.attachments = AttachmentList.new(attachments)
+        
         self.attachments.keys.each do |key|
           self.attachments[key] = Attachment.new(id, key, attachments[key], @connection)
         end

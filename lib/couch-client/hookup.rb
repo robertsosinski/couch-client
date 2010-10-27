@@ -79,12 +79,7 @@ module CouchClient
       when :post, :put
         # post and put http methods take a uri string, data string and options block
         # also convert the hash into json if the content_type of the request is json
-        if content_type == "application/json"
-          # Check that Symbols are not used in fields for keys or values, but only of check_for_symbols is enabled.
-          check_for_symbols(data) and self.send(:remove_instance_variable, :@payload) if @handler.check_for_symbols
-          data = data.to_json
-        end
-        
+        data = data.to_json if content_type == "application/json"
         Curl::Easy.send("http_#{verb}", handler.uri(path, query), data, &options)
       else
         raise InvalidHTTPVerb.new("only `head`, `get`, `post`, `put` and `delete` are supported")
@@ -93,7 +88,7 @@ module CouchClient
       # code is the http code (e.g. 200 or 404)
       code = easy.response_code
       
-      # body is either a nil, a hash or a string containing attachent data
+      # body is either a nil, a hash or a string containing attachment data
       body = if easy.body_str == "" || easy.body_str.nil?
         nil
       elsif content_type == "application/json" || [:post, :put, :delete].include?(verb)
@@ -107,22 +102,6 @@ module CouchClient
       end
       
       [code, body]
-    end
-    
-    # This method recursively traverses the document to ensure that keys or values are
-    # not Symbols, as CouchDB will save both to the database and cause data collisions.
-    def check_for_symbols(field)
-      @payload ||= field
-      
-      field.each_pair do |key, val|
-        [key, val].each do |obj|
-          if obj.is_a?(Symbol)
-            raise SymbolUsedInField.new("For Document '#{@payload}', in field '#{{key => val}}', '#{obj}' is a Symbol")
-          end
-        end
-
-        check_for_symbols(val) if val.is_a?(Hash)
-      end
     end
   end
 end

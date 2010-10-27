@@ -80,12 +80,12 @@ module CouchClient
         options[key] &&= options[key].to_json
       end
       
-      # Create a new Collection and pass the response code, body and connection.
+      # Create a new Collection with the response code, body and connection.
       Collection.new(*@hookup.get(["_all_docs"], options), self)
     end
     
-    # Is the interface used to construct new CouchDB documents.  Once constructed
-    # these documents can be saved, updated, validated, refreshed and deleted.
+    # The interface used to construct new CouchDB documents.  Once constructed
+    # these documents can be saved, updated, validated and deleted.
     def build(body = {})
       Document.new(nil, body, self)
     end
