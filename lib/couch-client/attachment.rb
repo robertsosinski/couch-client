@@ -1,7 +1,7 @@
 module CouchClient
   # The Attachment is an extended Hash that provides additional methods to
   # interact with attached files saved within a document.
-  class Attachment < Hash
+  class Attachment < ConsistentHash
     attr_reader :name
 
     # Attachment is constructed the id of the document it is attached to,

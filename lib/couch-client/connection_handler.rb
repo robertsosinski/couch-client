@@ -50,7 +50,7 @@ module CouchClient
         raise InvalidPathObject.new("path must be of type 'Array' not of type '#{path_obj.class}'")
       end
       
-      query_str = if query_obj.is_a?(::Hash)
+      query_str = if query_obj.is_a?(Hash)
         # If a Hash, stringify and escape each object, join each key/value with a "=" and each pair with a "&"
         query_obj.to_a.map{|q| q.map{|r| CGI.escape(r.to_s)}.join("=")}.join("&")
       else

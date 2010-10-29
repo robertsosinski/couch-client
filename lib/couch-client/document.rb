@@ -5,7 +5,7 @@ module CouchClient
   
   # The Document is an extended Hash that provides additional methods to
   # save, update (with attachments), and delete documents on the CouchDB.
-  class Document < Hash
+  class Document < ConsistentHash
     attr_reader :code, :error
 
     # Document is constructed with a status code, response body,
