@@ -1,12 +1,5 @@
 .DS_Store
-.bundle
 *.swp
 *.swo
-log/**
-tmp/**
-!log/.gitignore
-!tmp/.gitignore
-!tmp/restart.txt
-config/database.yml
-public/stylesheets/*.css
-public/javascripts/min/*.js.min
+pkg
+
