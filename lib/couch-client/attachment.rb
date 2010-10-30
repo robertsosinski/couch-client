@@ -25,7 +25,7 @@ module CouchClient
     end
 
     # Returns a string that contains file data
-    def file
+    def data
       @connection.hookup.get([@id, @name], nil, self["content_type"]).last
     end
   end

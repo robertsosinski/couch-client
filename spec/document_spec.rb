@@ -106,8 +106,8 @@ describe CouchClient::Document do
       @alice = @alice.saved_doc
       
       @alice.attachments.should eql({"image.png"=>{"content_type"=>"image/png", "revpos"=>3, "length"=>104744, "stub"=>true}, "plain.txt"=>{"content_type"=>"text/plain", "revpos"=>2, "length"=>406, "stub"=>true}})
-      @digest.call(@alice.attachments["plain.txt"].file).should eql(@plain_digest)
-      @digest.call(@alice.attachments["image.png"].file).should eql(@image_digest)
+      @digest.call(@alice.attachments["plain.txt"].data).should eql(@plain_digest)
+      @digest.call(@alice.attachments["image.png"].data).should eql(@image_digest)
     end
     
     it 'should not attach a file to a new record' do

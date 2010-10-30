@@ -50,8 +50,8 @@ describe CouchClient::Attachment do
   
   describe '#file' do
     it 'should yield the file for the attachment as a string' do
-      @digest.call(@attachment_plain.file).should eql(@plain_digest)
-      @digest.call(@attachment_image.file).should eql(@image_digest)
+      @digest.call(@attachment_plain.data).should eql(@plain_digest)
+      @digest.call(@attachment_image.data).should eql(@image_digest)
     end
   end
 end
