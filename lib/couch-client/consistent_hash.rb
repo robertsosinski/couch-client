@@ -7,14 +7,17 @@ module CouchClient
   #
   # This code was is heavily influenced by ActiveSupport::HashWithIndifferentAccess.
   class ConsistentHash < Hash
-    def initialize(constructor = {})
-      if constructor.is_a?(Hash)
+    # ConsistentHash is constructed with either a Hash or a default value.  When
+    # a Hash is given, a new ConsistentHash is constructed with the same default
+    # value.  When any other value is given it will be set as the default value.
+    def initialize(hash = {})
+      if hash.is_a?(Hash)
         super()
-        update(constructor).tap do |new_hash|
-          new_hash.default = constructor.default
+        update(hash).tap do |new_hash|
+          new_hash.default = hash.default
         end
       else
-        super(constructor)
+        super(hash)
       end
     end
 
