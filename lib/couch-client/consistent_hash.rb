@@ -2,12 +2,17 @@ module CouchClient
   # ConsistentHash allows indifferent access with either with symbols or strings
   # while also converting symbol values in Arrays or Hashes into strings values.
   #
+  # ConsistentHash only overides methods that already exist in the Hash class;
+  # see the documentation in the Ruby core API for clarification and examples.
+  #
   # This code was is heavily influenced by ActiveSupport::HashWithIndifferentAccess.
   class ConsistentHash < Hash
     def initialize(constructor = {})
       if constructor.is_a?(Hash)
-        super
-        update(constructor)
+        super()
+        update(constructor).tap do |new_hash|
+          new_hash.default = constructor.default
+        end
       else
         super(constructor)
       end
@@ -18,12 +23,6 @@ module CouchClient
         self[key]
       else
         super
-      end
-    end
-
-    def self.new_from_hash_copying_default(hash)
-      ConsistentHash.new(hash).tap do |new_hash|
-        new_hash.default = hash.default
       end
     end
 
@@ -83,7 +82,7 @@ module CouchClient
 
     def convert_value(value)
       if value.instance_of?(Hash)
-        self.class.new_from_hash_copying_default(value)
+        ConsistentHash.new(value)
       elsif value.instance_of?(Symbol)
         value.to_s
       elsif value.instance_of?(Array)
