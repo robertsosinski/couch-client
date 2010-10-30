@@ -1,7 +1,5 @@
 $:.unshift(File.dirname(File.expand_path(__FILE__)))
 
-# require '../core_ext/hash'
-
 require 'couch-client/consistent_hash'
 require 'couch-client/connection'
 require 'couch-client/connection_handler'

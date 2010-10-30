@@ -50,7 +50,7 @@ Fetching a Document
     person = Couch["a3b556796203eab59c31fa21b00043e3"]
     
     # You can also pass options if desired
-    person = Couch["a3b556796203eab59c31fa21b00043e3", :include_docs => true]
+    person = Couch["a3b556796203eab59c31fa21b00043e3", :attachments => true]
 
 Getting a Document's id, rev and attachments
 --------------------------------------------
@@ -61,7 +61,7 @@ Getting a Document's id, rev and attachments
     person.rev # => "1-6665e6330ba75e757ce1f6d793305d67"
 
     # A document's attachments
-    # NOTE: This will be an CouchClient::AttachmentList, and attachments will be CouchClient::Attachment objects
+    # NOTE: This will be a CouchClient::AttachmentList, and attachments will be CouchClient::Attachment objects
     person.attachments # => {"plain.txt"=>{"content_type"=>"text/plain", "revpos"=>2, "length"=>406, "stub"=>true}}
     
 
@@ -140,8 +140,8 @@ Using Design Documents
     # MapReduce Views
     Couch.design(:people).view(:sum) # => [{"key" => "male", "value" => 1}, {"key" => "female", "value" => 1}]
 
-Using FullText Searching (Must Have CouchDB-Lucene Installed)
--------------------------------------------------------------
+Using FullText Search (Must Have CouchDB-Lucene Installed)
+----------------------------------------------------------
 
     # Getting search results
     Couch.design(:people).fulltext(:by_name, :q => "alice") # => [{"id"=>"a6c92090bbee241e892be1ac4464b9d9", "score"=>4.505526065826416, "fields"=>{"default"=>"alice"}}]
