@@ -26,7 +26,7 @@ module CouchClient
 
     # Returns a string that contains attachment data
     def data
-      @connection.hookup.get([@id, @name], nil, self["content_type"]).last
+      @data ||= @connection.hookup.get([@id, @name], nil, self["content_type"]).last
     end
   end
 end

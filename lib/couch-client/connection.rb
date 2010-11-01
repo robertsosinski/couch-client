@@ -84,6 +84,11 @@ module CouchClient
       Collection.new(*@hookup.get(["_all_docs"], options), self)
     end
     
+    # Returns a list of all _design documents.
+    def all_design_docs(options = {})
+      all_docs({"startkey" => "_design/", "endkey" => "_design0"}.merge(options))
+    end
+    
     # The interface used to construct new CouchDB documents.  Once constructed
     # these documents can be saved, updated, validated and deleted.
     def build(body = {})

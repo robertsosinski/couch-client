@@ -71,6 +71,17 @@ describe CouchClient::Connection do
     end
   end
   
+  describe '#all_design_docs' do
+    it 'should return a list of all documents stored' do
+      all_docs = @couch.all_design_docs("include_docs" => true)
+      all_docs.should be_a(CouchClient::Collection)
+      docs = all_docs.map{|doc| doc["doc"].id}
+      docs.should_not include(@alice.id)
+      docs.should_not include(@bob.id)
+      docs.should include(@design.id)
+    end
+  end
+  
   describe '#build' do
     before(:all) do
       @charlie = @couch.build({"name" => "charlie", "city" => "san fran"})

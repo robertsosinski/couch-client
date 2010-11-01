@@ -11,10 +11,11 @@ require 'couch-client/attachment'
 require 'couch-client/design'
 require 'couch-client/collection'
 require 'couch-client/row'
+require "couch-client/rake_task" if defined?(Rake)
 
 # The CouchClient module is the overall container of all CouchClient logic.
 module CouchClient
-  VERSION = "0.0.1"
+  VERSION = "0.0.2"
   
   class Error < Exception; end
   

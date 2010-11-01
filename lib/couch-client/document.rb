@@ -42,14 +42,14 @@ module CouchClient
     # Returns a copy of the same document that is currently saved on the server.
     def saved_doc(query = {})
       if new?
-        raise DocumentNotAvailable.new('this document is new and therefore has not been saved yet')
+        raise DocumentNotAvailable.new("this document is new and therefore has not been saved yet")
       else
         @connection[self.id, query]
       end
     end
 
     # Tries to save the document to the server.  If it us unable to,
-    # it will save the error and make it available with via #error.
+    # it will save the error and make it available via #error.
     def save
       # Ensure that "_id" is a String if it is defined.
       if self.key?("_id") && !self["_id"].is_a?(String)
@@ -78,7 +78,7 @@ module CouchClient
     end
 
     # Tries to attach a file to the document.  If it us unable to,
-    # it will save the error and make it available with via #error.
+    # it will save the error and make it available via #error.
     def attach(name, content, content_type)
       # The document must already be saved to the server before a file can be attached.
       if self.rev
@@ -101,7 +101,7 @@ module CouchClient
     end
     
     # Tries to delete a file from the server.  If it us unable to,
-    # it will save the error and make it available with via #error.
+    # it will save the error and make it available via #error.
     def delete!
       @code, body = @connection.hookup.delete([id], {"rev" => rev})
       
