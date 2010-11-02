@@ -161,7 +161,7 @@ Database Administration
     Couch.database.create
 
     # See if a database exists
-    Couch.database.exists
+    Couch.database.exists?
 
     # Get database stats
     Couch.database.stats

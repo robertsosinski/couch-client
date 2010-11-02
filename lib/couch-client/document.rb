@@ -71,7 +71,7 @@ module CouchClient
         @deleted  = false
         true
       else
-        # Save error message and return `false`.
+        # Else save error message and return `false`.
         @error = {body["error"] => body["reason"]}
         false
       end
@@ -90,7 +90,7 @@ module CouchClient
           self.rev = body["rev"]
           true
         else
-          # Save error message and return `false`.
+          # Else save error message and return `false`.
           @error = {body["error"] => body["reason"]}
           false
         end
@@ -112,7 +112,7 @@ module CouchClient
         @deleted = true
         true
       else
-        # Save error message and return `false`.
+        # Else save error message and return `false`.
         @error = {body["error"] => body["reason"]}
         false
       end

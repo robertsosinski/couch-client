@@ -2,10 +2,10 @@ Need
 * design save rake task
 
 Next
+* replication
+* show design
+* list design
 * batch insert
 * batch update
 * batch delete
 * batch upload
-* show design
-* list design
-* replication
