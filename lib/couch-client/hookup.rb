@@ -6,7 +6,7 @@ module CouchClient
   class InvalidJSONData < Exception; end
   class SymbolUsedInField < Exception; end
 
-  # The Hookup is the basic HTTP interface that connects CouchClient to CouchDB.
+  # Hookup is the basic HTTP interface that connects CouchClient to CouchDB.
   # Hookup can use any HTTP library if the conventions listed below are followed.
   #
   # If modified, Hookup must have head, get, post, put and delete instance methods.

@@ -1,5 +1,5 @@
 module CouchClient
-  # The Database is just a organized collection of functions that interact with the
+  # Database is just an organized collection of functions that interact with the
   # CouchDB database such as stats, creation, compaction, replication and deletion.
   class Database
     # Database is constructed with a connection that is used to make HTTP requests to the server.

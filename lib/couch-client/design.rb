@@ -4,7 +4,7 @@ module CouchClient
   class ListNotFound < Exception; end
   class FullTextNotFound < Exception; end
   
-  # The Design is the interface used to interact with design documents
+  # Design is the interface used to interact with design documents
   # in order make view, show, list and fulltext requests.
   class Design
     attr_accessor :id

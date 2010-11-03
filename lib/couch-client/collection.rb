@@ -1,6 +1,6 @@
 module CouchClient
-  # The Document is an extended Array that provides additional methods
-  # and state to get status codes, info and connect documents to the server.
+  # Collection is an extended Array that provides additional methods and
+  # state to get status codes, info and connect documents to the server.
   class Collection < Array
     attr_reader :code, :info
     

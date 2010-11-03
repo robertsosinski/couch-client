@@ -1,5 +1,5 @@
 module CouchClient
-  # The AttachmentList prevents ConsistentHash from absorbing
+  # AttachmentList prevents ConsistentHash from absorbing
   # instances of Attachment and making them a ConsistentHash.
   class AttachmentList < ConsistentHash
     # AttachmentList is constructed with a hash of attachments.

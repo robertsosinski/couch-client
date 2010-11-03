@@ -4,19 +4,21 @@ require 'set'
 require 'pathname'
 
 module CouchClient
-  # The RakeTask is a namespace for all Rake tasks that are bundled with
+  # RakeTask is a namespace for all Rake tasks that are bundled with
   # CouchClient, such as database creation, sync, compaction and deletion.
   class RakeTask < ::Rake::TaskLib
     class MissingCouchClientConnection < Exception; end
     
     attr_accessor :connection, :design_path
     
-    # RakeTask is constructed with a block of the following parameters.
+    # Start using CouchClient::RakeTask by constructing a new instance with a block.
     #
     #   CouchClient::RakeTask.new do |c|
     #     c.connection = Couch
     #     c.design_path = "./app/designs"
     #   end
+    #
+    # CouchClient::RakeTask.new takes the following options.
     #
     #  connection: A CouchClient Connection, default being `Couch`.
     #  design_path: The path where design documents are stored, default being "./designs".
@@ -82,7 +84,6 @@ module CouchClient
         end
       end
       
-      # Build hash recursively.
       recurser.call(@design_path)
       
       # Get a set of id's that are currently saved and a set that are avaiable locally.

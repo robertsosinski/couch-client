@@ -3,7 +3,7 @@ module CouchClient
   class DocumentNotValid < Exception; end
   class DocumentNotFound < Exception; end
 
-  # The Connection is the high-level interface used to interact with the CouchDB Server.
+  # Connection is the high-level interface used to interact with the CouchDB Server.
   class Connection
     attr_reader :hookup, :database
 
@@ -89,7 +89,7 @@ module CouchClient
       all_docs({"startkey" => "_design/", "endkey" => "_design0"}.merge(options))
     end
     
-    # The interface used to construct new CouchDB documents.  Once constructed
+    # The interface used to construct new CouchDB documents.  Once constructed,
     # these documents can be saved, updated, validated and deleted.
     def build(body = {})
       Document.new(nil, body, self)

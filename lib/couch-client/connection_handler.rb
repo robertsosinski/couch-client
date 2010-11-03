@@ -5,7 +5,7 @@ module CouchClient
   class InvalidQueryObject < Exception; end
   class InvalidDatabaseName < Exception; end
   
-  # The ConnectionHandler creates properly formed URIs and paths, while also
+  # ConnectionHandler creates properly formed URIs and paths, while also
   # specifying sensible defaults for CouchDB.  Once initialized, parameters
   # can be wrote and read using getter and setter syntax.
   class ConnectionHandler

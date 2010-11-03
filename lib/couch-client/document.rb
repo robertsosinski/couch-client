@@ -3,7 +3,7 @@ module CouchClient
   class AttachmentError < Exception; end
   class DocumentNotAvailable < Exception; end
   
-  # The Document is an extended Hash that provides additional methods to
+  # Document is an extended Hash that provides additional methods to
   # save, update (with attachments), and delete documents on the CouchDB.
   class Document < ConsistentHash
     attr_reader :code, :error
