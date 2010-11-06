@@ -90,11 +90,12 @@ module CouchClient
       # body is either a nil, a hash or a string containing attachment data
       body = if easy.body_str == "" || easy.body_str.nil?
         nil
-      elsif [content_type, easy.content_type].include?("application/json") || [:post, :put, :delete].include?(verb)
+      # If the response is a 200, it may not be JSON, therefore check the content type.
+      elsif code != 200 || [content_type, easy.content_type].include?("application/json")
         begin
           JSON.parse(easy.body_str)
         rescue
-          raise InvalidJSONData.new("document received is not valid JSON")
+          raise InvalidJSONData.new("data received is not valid JSON")
         end
       else
         easy.body_str

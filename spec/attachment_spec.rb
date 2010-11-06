@@ -25,9 +25,17 @@ describe CouchClient::Attachment do
     
     @alice.attach("plain.txt", @plain, "text/plain")
     @alice.attach("image.png", @image, "image/png")
+    @alice.attach("missing", @plain, "text/plain") # will be deleted
     
-    @attachment_plain = @alice.saved_doc.attachments["plain.txt"]
-    @attachment_image = @alice.saved_doc.attachments["image.png"]
+    @alice = @alice.saved_doc
+    
+    @attachment_plain = @alice.attachments["plain.txt"]
+    @attachment_image = @alice.attachments["image.png"]
+    
+    @attachment_missing = @alice.attachments["missing"]
+    
+    @alice.attachments.delete("missing")
+    @alice.save
   end
   
   after(:all) do
@@ -48,10 +56,14 @@ describe CouchClient::Attachment do
     end
   end
   
-  describe '#file' do
+  describe '#data' do
     it 'should yield the file for the attachment as a string' do
       @digest.call(@attachment_plain.data).should eql(@plain_digest)
       @digest.call(@attachment_image.data).should eql(@image_digest)
+    end
+    
+    it 'should raise an error if the attachment is not found' do
+      lambda{@attachment_missing.data}.should raise_error(CouchClient::AttachmentNotFound)
     end
   end
 end

@@ -116,16 +116,15 @@ Working with Collections
 ------------------------
 
     # Getting all documents
-    Couch.all_docs # => [{"id"=>"7f22af967b04d1b88212d3d26b017ff6", "key"=>"7f22af967b04d1b88212d3d26b017ff6", "value"=>{"rev"=>"1-f867d6b9aa0a5c31d647d57110fa7d36"}},
-                   #     {"id"=>"7f22af967b04d1b88212d3d26b018e89", "key"=>"7f22af967b04d1b88212d3d26b018e89", "value"=>{"rev"=>"3-3a635c1a2b5a8ff94bb5d63eee3cd6ef"}}]
+    Couch.all_docs 
     
     # Getting all documents with document fields
     Couch.all_docs(:include_docs => true)
 
     # Specifying a `key`, `startkey` or `endkey`
-    couch.all_docs(:key => "7f22af967b04d1b88212d3d26b018e89")
-    couch.all_docs(:startkey => 200)
-    couch.all_docs(:endkey => [2010, 01, 01])
+    Couch.all_docs(:key => "7f22af967b04d1b88212d3d26b018e89")
+    Couch.all_docs(:startkey => 200)
+    Couch.all_docs(:endkey => [2010, 01, 01])
 
     # Getting additional collection information
     Couch.all_docs.info # => {"total_rows" => 2, "offset" => 0}
@@ -133,36 +132,36 @@ Working with Collections
 Using Design Documents
 ----------------------
 
-    # Map Views
-    Couch.design(:people).view(:all) # => [{"id"=>"7f22af967b04d1b88212d3d26b017ff6", "key"=>"7f22af967b04d1b88212d3d26b017ff6", "value"=>{"name" => "alice"}},
-                                     #     {"id"=>"7f22af967b04d1b88212d3d26b018e89", "key"=>"7f22af967b04d1b88212d3d26b018e89", "value"=>{"name" => "bob"}}]
+    # Map views
+    Couch.design(:people).view(:all)
+    
+    # Map views with a key
+    Couch.design(:people).view(:by_sex, :key => "male")
 
-    # MapReduce Views
-    Couch.design(:people).view(:sum) # => [{"key" => "male", "value" => 1}, {"key" => "female", "value" => 1}]
+    # MapReduce views
+    Couch.design(:people).view(:sum)
 
 Using Show and List Functions
 -----------------------------
 
-    # Show Functions
-    Couch.design(:people).show(:html) # => "<h1>alice</h1>"
-    Couch.design(:people).show(:json) # => {"name" => "alice"}
+    # Show functions
+    Couch.design(:people).show(:html, "7f22af967b04d1b88212d3d26b018e89") # => "<h1>alice</h1>"
+    Couch.design(:people).show(:json, "7f22af967b04d1b88212d3d26b018e89") # => {"name" => "alice"}
     
-    # List Functions
+    # List functions
     Couch.design(:people).list(:json, :people, :all) # => ["alice", "bob", "charlie"]
 
 Using FullText Search (Must Have CouchDB-Lucene Installed)
 ----------------------------------------------------------
 
     # Getting search results
-    Couch.design(:people).fulltext(:by_name, :q => "ali*") # => [{"id"=>"a6c92090bbee241e892be1ac4464b9d9", "score"=>4.505526065826416, "fields"=>{"default"=>"alice"}}]
+    Couch.design(:people).fulltext(:by_name, :q => "ali*")
 
     # Getting additional search results information
-    Couch.design(:people).fulltext(:by_name, :q => "ali*").info  # => {"q"=>"default:alice", "etag"=>"11e1541e20d9b860", "skip"=>0, "limit"=>25, 
-                                                                 #     "total_rows"=>7, "search_duration"=>0, "fetch_duration"=>1}
+    Couch.design(:people).fulltext(:by_name, :q => "ali*").info
 
     # Getting search index information
-    Couch.design(:people).fulltext(:by_name) # => {"current"=>true, "disk_size"=>3759, "doc_count"=>25, "doc_del_count"=>3, "fields"=>["default"], 
-                                             #     "last_modified"=>"1288403429000", "optimized"=>false, "ref_count"=>2}
+    Couch.design(:people).fulltext(:by_name)
     
     # Optimizing an index
     Couch.design(:people).fulltext(:by_name, :optimize) # => true
