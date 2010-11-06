@@ -1,3 +1,5 @@
-v0.0.2. fixing gemspec
+v0.1.0. Adding rake tasks to sync and manage database functions and design documents.  Also added support for list and show functions; as well as fulltext administration.
 
-v0.0.1. first release
+v0.0.2. Fixing gemspec
+
+v0.0.1. First release

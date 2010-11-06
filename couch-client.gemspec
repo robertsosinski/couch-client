@@ -2,12 +2,12 @@
 
 Gem::Specification.new do |s|
   s.name = %q{couch-client}
-  s.version = "0.0.2"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Robert Sosinski"]
   s.date = %q{2010-11-05}
-  s.description = %q{CouchClient is Ruby library that can be used to interact with CouchDB}
+  s.description = %q{A Ruby interface for CouchDB}
   s.email = %q{email@robertsosinski.com}
   s.extra_rdoc_files = ["CHANGELOG", "LICENSE", "README.markdown", "TODO", "lib/couch-client.rb", "lib/couch-client/attachment.rb", "lib/couch-client/attachment_list.rb", "lib/couch-client/collection.rb", "lib/couch-client/connection.rb", "lib/couch-client/connection_handler.rb", "lib/couch-client/consistent_hash.rb", "lib/couch-client/database.rb", "lib/couch-client/design.rb", "lib/couch-client/document.rb", "lib/couch-client/hookup.rb", "lib/couch-client/row.rb"]
   s.files = ["CHANGELOG", "LICENSE", "Manifest", "README.markdown", "Rakefile", "TODO", "lib/couch-client.rb", "lib/couch-client/attachment.rb", "lib/couch-client/attachment_list.rb", "lib/couch-client/collection.rb", "lib/couch-client/connection.rb", "lib/couch-client/connection_handler.rb", "lib/couch-client/consistent_hash.rb", "lib/couch-client/database.rb", "lib/couch-client/design.rb", "lib/couch-client/document.rb", "lib/couch-client/hookup.rb", "lib/couch-client/row.rb", "spec/attachment_list_spec.rb", "spec/attachment_spec.rb", "spec/collection_spec.rb", "spec/conection_handler_spec.rb", "spec/connection_spec.rb", "spec/consistent_hash_spec.rb", "spec/couch-client_spec.rb", "spec/database_spec.rb", "spec/design_spec.rb", "spec/document_spec.rb", "spec/files/image.png", "spec/files/plain.txt", "spec/hookup_spec.rb", "spec/row_spec.rb", "spec/spec_helper.rb", "couch-client.gemspec"]
@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{couch-client}
   s.rubygems_version = %q{1.3.7}
-  s.summary = %q{The goal of CouchClient is to make documents feel as much as possible what they already represent: a Hash of primitives, Arrays and other Hashes.}
+  s.summary = %q{A Ruby interface for CouchDB that provides easy configuration, state management and utility methods.}
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
