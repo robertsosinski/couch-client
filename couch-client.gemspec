@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Robert Sosinski"]
-  s.date = %q{2010-10-30}
+  s.date = %q{2010-11-05}
   s.description = %q{CouchClient is Ruby library that can be used to interact with CouchDB}
   s.email = %q{email@robertsosinski.com}
   s.extra_rdoc_files = ["CHANGELOG", "LICENSE", "README.markdown", "TODO", "lib/couch-client.rb", "lib/couch-client/attachment.rb", "lib/couch-client/attachment_list.rb", "lib/couch-client/collection.rb", "lib/couch-client/connection.rb", "lib/couch-client/connection_handler.rb", "lib/couch-client/consistent_hash.rb", "lib/couch-client/database.rb", "lib/couch-client/design.rb", "lib/couch-client/document.rb", "lib/couch-client/hookup.rb", "lib/couch-client/row.rb"]
@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{couch-client}
   s.rubygems_version = %q{1.3.7}
-  s.summary = %q{The goal of CouchClient is to make documents feel as much as possible as what they already represent, a Hash of primitives, Arrays and other Hashes.}
+  s.summary = %q{The goal of CouchClient is to make documents feel as much as possible what they already represent: a Hash of primitives, Arrays and other Hashes.}
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
@@ -25,12 +25,18 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<json>, [">= 1.4.6"])
       s.add_runtime_dependency(%q<curb>, [">= 0.7.8"])
+      s.add_development_dependency(%q<echoe>, [">= 4.3.1"])
+      s.add_development_dependency(%q<rspec>, [">= 2.0.0"])
     else
       s.add_dependency(%q<json>, [">= 1.4.6"])
       s.add_dependency(%q<curb>, [">= 0.7.8"])
+      s.add_dependency(%q<echoe>, [">= 4.3.1"])
+      s.add_dependency(%q<rspec>, [">= 2.0.0"])
     end
   else
     s.add_dependency(%q<json>, [">= 1.4.6"])
     s.add_dependency(%q<curb>, [">= 0.7.8"])
+    s.add_dependency(%q<echoe>, [">= 4.3.1"])
+    s.add_dependency(%q<rspec>, [">= 2.0.0"])
   end
 end

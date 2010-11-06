@@ -1,7 +1,7 @@
 Introduction
 ============
 
-CouchClient is Ruby library that can be used to interact with CouchDB.  The goal of CouchClient is to make documents feel as much as possible as what they already represent, a Hash of primitives, Arrays and other Hashes.  As such, the interface for documents closely represents that of Hash and Array, but also includes additional methods and state in order to manage documents and interface with the CouchDB Server.
+CouchClient is a Ruby interface for CouchDB that provides easy configuration, state management and utility methods.
 
 Installation
 ------------
@@ -140,22 +140,96 @@ Using Design Documents
     # MapReduce Views
     Couch.design(:people).view(:sum) # => [{"key" => "male", "value" => 1}, {"key" => "female", "value" => 1}]
 
+Using Show and List Functions
+-----------------------------
+
+    # Show Functions
+    Couch.design(:people).show(:html) # => "<h1>alice</h1>"
+    Couch.design(:people).show(:json) # => {"name" => "alice"}
+    
+    # List Functions
+    Couch.design(:people).list(:json, :people, :all) # => ["alice", "bob", "charlie"]
+
 Using FullText Search (Must Have CouchDB-Lucene Installed)
 ----------------------------------------------------------
 
     # Getting search results
-    Couch.design(:people).fulltext(:by_name, :q => "alice") # => [{"id"=>"a6c92090bbee241e892be1ac4464b9d9", "score"=>4.505526065826416, "fields"=>{"default"=>"alice"}}]
+    Couch.design(:people).fulltext(:by_name, :q => "ali*") # => [{"id"=>"a6c92090bbee241e892be1ac4464b9d9", "score"=>4.505526065826416, "fields"=>{"default"=>"alice"}}]
 
     # Getting additional search results information
-    Couch.design(:people).fulltext(:by_name, :q => "alice").info # => {"q"=>"default:alice", "etag"=>"11e1541e20d9b860", "skip"=>0, "limit"=>25, 
+    Couch.design(:people).fulltext(:by_name, :q => "ali*").info  # => {"q"=>"default:alice", "etag"=>"11e1541e20d9b860", "skip"=>0, "limit"=>25, 
                                                                  #     "total_rows"=>7, "search_duration"=>0, "fetch_duration"=>1}
 
     # Getting search index information
     Couch.design(:people).fulltext(:by_name) # => {"current"=>true, "disk_size"=>3759, "doc_count"=>25, "doc_del_count"=>3, "fields"=>["default"], 
                                              #     "last_modified"=>"1288403429000", "optimized"=>false, "ref_count"=>2}
+    
+    # Optimizing an index
+    Couch.design(:people).fulltext(:by_name, :optimize) # => true
+    
+    # Expunging an index
+    Couch.design(:people).fulltext(:by_name, :expunge) # => true
 
-Database Administration
------------------------
+Convenience Rake Tasks
+----------------------
+
+CouchClient rake tasks can be enabled by adding the following to your `Rakefile`.
+
+    CouchClient::RakeTask.new do |c|
+      c.connection  = Couch
+      c.design_path = "./designs"
+    end
+
+Two parameters are available, `connection` should be the actual variable used for your CouchDB interface and `design_path` should be the application's location where design documents will be stored.
+
+Within the design path, you should format each design document with folders and files corresponding to the fields in your design document.
+
+    designs
+    ├── people
+    │   ├── fulltext
+    │   │   └── by_name
+    │   │       └── index.js
+    │   ├── lists
+    │   │   ├── html.js
+    │   │   └── json.js
+    │   ├── shows
+    │   │   ├── html.js
+    │   │   ├── json.js
+    │   │   └── xml.js
+    │   ├── validate_on_update.js
+    │   └── views
+    │       ├── all
+    │       │   └── map.js
+    │       └── sum
+    │           ├── map.js
+    │           └── reduce.js
+    └── robots
+        ├── fulltext
+        │   └── by_name
+        │       └── index.js
+        ├── validate_on_update.js
+        └── views
+            ├── all
+            │   └── map.js
+            └── sum
+                ├── map.js
+                └── reduce.js
+    
+Once you have your design documents created, you can rum `rake couch:sync`, and CouchClient will create new documents, update existing documents (only if there are changes) and delete documents that no longer exist.
+
+CouchClient also offers tasks that help in maintaining CouchDB.
+    
+    # Create a database
+    rake couch:create
+    
+    # Delete a database
+    rake couch:delete
+    
+    # Compact a database
+    rake couch:compact
+
+Performing Database Administration
+----------------------------------
 
     # Create a database
     Couch.database.create
