@@ -4,7 +4,6 @@ require 'json'
 module CouchClient
   class InvalidHTTPVerb < Exception; end
   class InvalidJSONData < Exception; end
-  class SymbolUsedInField < Exception; end
 
   # Hookup is the basic HTTP interface that connects CouchClient to CouchDB.
   # Hookup can use any HTTP library if the conventions listed below are followed.
@@ -87,14 +86,17 @@ module CouchClient
       # code is the http code (e.g. 200 or 404)
       code = easy.response_code
       
-      # body is either a nil, a hash or a string containing attachment data
+      # body is either a nil, a hash or a string containing attachment data.
       body = if easy.body_str == "" || easy.body_str.nil?
+        # Head requests should return `nil`.
         nil
-      # If the response is a 200, it may not be JSON, therefore check the content type.
+      # If the response is not a 200, then it must be JSON (as CouchDB returns all feedback as JSON), so parse it.
+      # If the response is a 200, it may not be JSON (if it is an attachment), therefore check the content type before parsing.
       elsif code != 200 || [content_type, easy.content_type].include?("application/json")
         begin
           JSON.parse(easy.body_str)
         rescue
+          # Raise an error of the JSON returned is malformed.
           raise InvalidJSONData.new("data received is not valid JSON")
         end
       else
