@@ -122,10 +122,10 @@ Working with Collections
     # Getting all documents with document fields
     Couch.all_docs(:include_docs => true)
 
-    # Specifying a `key`, `start_key` or `end_key`
+    # Specifying a `key`, `startkey` or `endkey`
     couch.all_docs(:key => "7f22af967b04d1b88212d3d26b018e89")
-    couch.all_docs(:start_key => 200)
-    couch.all_docs(:end_key => [2010, 01, 01])
+    couch.all_docs(:startkey => 200)
+    couch.all_docs(:endkey => [2010, 01, 01])
 
     # Getting additional collection information
     Couch.all_docs.info # => {"total_rows" => 2, "offset" => 0}

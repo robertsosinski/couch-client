@@ -19,6 +19,13 @@ describe CouchClient::Connection do
         "all" => {"map" => "function(doc){emit(doc._id, doc)}"},
         "sum" => {"map" => "function(doc){emit(null, 1)}", "reduce" => "function(id, values, rereduce){return sum(values)}"},
       },
+      "shows" => {
+        "html" => "function(doc, req){return{body: '<h1>' + doc.name + '</h1>', headers: {'Content-Type': 'text/html'}}}",
+        "json" => "function(doc, req){return{body: JSON.stringify({'name': doc.name}), headers: {'Content-Type': 'application/json'}}}"
+      },
+      "lists" => {
+        "json" => "function(head, req){var row;var rows = [];while(row = getRow()){rows.push(row.value.name);}send(JSON.stringify(rows));}"
+      },
       "fulltext" => {
         "by_name" => {
           "index" => "function(doc){var ret = new Document();ret.add(doc.name);return ret;}"
@@ -78,11 +85,19 @@ describe CouchClient::Connection do
   end
   
   describe '#show' do
-    pending 'will be built in another release'
+    it 'should return valid html for a html show function' do
+      @people.show("html", "123").should eql("<h1>alice</h1>")
+    end
+    
+    it 'should return valid json for a json show function' do
+      @people.show("json", "123").should eql({"name"=>"alice"})
+    end
   end
   
   describe '#list' do
-    pending 'will be built in another release'
+    it 'should return valid json for a json list function' do
+      @people.list("json", "people", "all").should eql(["alice", "bob", "charlie"])
+    end
   end
   
   describe '#fulltext' do
@@ -95,6 +110,18 @@ describe CouchClient::Connection do
       fulltext.should be_a(CouchClient::Collection)
       fulltext.info.should be_a(Hash)
       fulltext.first["id"].should eql(@alice.id)
+    end
+    
+    it 'should return true when administration operations are successfully performed' do
+      @people.fulltext("by_name", "optimize").should be_true
+    end
+    
+    it 'should raise a "not found" error if the fulltext field was not found' do
+      lambda{@people.fulltext("not_found")}.should raise_error(CouchClient::FullTextNotFound)
+    end
+    
+    it 'should raise a "bad request" error if the requested administration operation was not valid' do
+      lambda{@people.fulltext("by_name", "bad_request")}.should raise_error(CouchClient::FullTextRequestBad)
     end
   end
 end

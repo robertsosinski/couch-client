@@ -60,6 +60,10 @@ describe CouchClient::ConnectionHandler do
     @ch.uri(["path"]).should eql("https://couchone.com:8080/abc123%2F_%24%28%29%2B-/path")
   end
   
+  it 'should properly json encode key, startkey and endkey query paramenters' do
+    @ch.uri(["path"], {:key => "7f22af967b04d1b88212d3d26b018e89", "startkey" => 2010, :endkey => [2010, 01, 01]}).should eql("https://couchone.com:8080/abc123%2F_%24%28%29%2B-/path?key=%227f22af967b04d1b88212d3d26b018e89%22&startkey=2010&endkey=%5B2010%2C1%2C1%5D")
+  end
+  
   it 'should raise an error if an invalid name is given' do
     lambda{@ch.database = "ABC!@#"}.should raise_error(CouchClient::InvalidDatabaseName)
   end

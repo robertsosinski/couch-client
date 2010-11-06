@@ -66,8 +66,8 @@ module CouchClient
       
       # Recurse though the design directory and construct a hash of design functions.
       recurser = lambda do |path|
-        path_breadcrumbs = path.to_s.split("/")[design_path_depth..-1] # e.g. ["people", "views", "all", "map.js"]
-        path_hash_follow = path_breadcrumbs.reduce(""){|memo, key| memo + "['#{key}']"} # e.g. "['people']['views']['all']['map.js']"
+        path_breadcrumbs = path.to_s.match("[^\.]+")[0].split("/")[design_path_depth..-1] # e.g. ["people", "views", "all", "map"]
+        path_hash_follow = path_breadcrumbs.reduce(""){|memo, key| memo + "['#{key}']"}   # e.g. ['people']['views']['all']['map']
         
         if path.directory?
           # Set an empty hash for the directory.

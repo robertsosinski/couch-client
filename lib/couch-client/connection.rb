@@ -75,11 +75,6 @@ module CouchClient
     
     # Acts as the interface to CouchDB's `_all_docs` map view.
     def all_docs(options = {})
-      # key, startkey and endkey must be JSON encoded
-      ["key", "startkey", "endkey"].each do |key|
-        options[key] &&= options[key].to_json
-      end
-      
       # Create a new Collection with the response code, body and connection.
       Collection.new(*@hookup.get(["_all_docs"], options), self)
     end

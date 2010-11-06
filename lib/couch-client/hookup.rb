@@ -66,8 +66,7 @@ module CouchClient
       # Setup curb options block
       options = lambda do |easy|
         easy.headers["User-Agent"] = "couch-client v#{VERSION}"
-        easy.headers["Content-Type"] = content_type if content_type
-        easy.headers["Accepts"] = content_type if content_type
+        easy.headers["Content-Type"] = content_type if content_type && [:post, :put].include?(verb)
         easy.username = handler.username
         easy.userpwd  = handler.password
       end
@@ -91,7 +90,7 @@ module CouchClient
       # body is either a nil, a hash or a string containing attachment data
       body = if easy.body_str == "" || easy.body_str.nil?
         nil
-      elsif content_type == "application/json" || [:post, :put, :delete].include?(verb)
+      elsif [content_type, easy.content_type].include?("application/json") || [:post, :put, :delete].include?(verb)
         begin
           JSON.parse(easy.body_str)
         rescue
