@@ -69,7 +69,7 @@ Working with a Document
 -----------------------
 
     # Building new documents
-    # Couch.build({:name => "alice"})
+    # person = Couch.build({:name => "alice"})
 
     # Getting and setting fields (with indifferent access and value "stringification")
     # person[:name] # => "alice"
@@ -244,6 +244,4 @@ Performing Database Administration
 
     # Delete the database
     Couch.databse.delete!
-
-
 

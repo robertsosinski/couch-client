@@ -31,7 +31,7 @@ module CouchClient
         raise MissingCouchClientConnection.new("specify a CouchClient connection within your RakeTask setup.")
       end
       
-      @design_path = Pathname(@design_path || './designs')
+      @design_path = Pathname.new(@design_path || './designs')
       
       # Create Rake tasks.
       namespace :couch do
@@ -169,7 +169,7 @@ module CouchClient
       if resp["ok"]
         puts "Compaction Complete."
       else
-        utils_uri = lambda {
+        utils_uri = lambda{
           handler = handler = @connection.hookup.handler
           handler.uri.gsub(/#{handler.database}$/, "_utils")
         }.call
