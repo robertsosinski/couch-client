@@ -179,6 +179,17 @@ CouchClient rake tasks can be enabled by adding the following to your `Rakefile`
       c.design_path = "./designs"
     end
 
+Or you can add CouchClient rake tasks to your rails app by making the following file in `lib/tasks/couch.rake`.
+
+    require "#{Rails.root}/config/environment"
+
+    CouchClient::RakeTask.new do |c|
+      c.connection  = Couch
+      c.design_path = "./app/designs"
+    end
+
+You can then specify your CouchClient settings for each each environment in their respective configuration files (e.g. development.rb, test.rb and production.rb).
+
 Two parameters are available, `connection` should be the actual variable used for your CouchDB interface and `design_path` should be the application's location where design documents will be stored.
 
 Within the design path, you should format each design document with folders and files corresponding to the fields in your design document.

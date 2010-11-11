@@ -2,15 +2,15 @@
 
 Gem::Specification.new do |s|
   s.name = %q{couch-client}
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Robert Sosinski"]
-  s.date = %q{2010-11-05}
+  s.date = %q{2010-11-11}
   s.description = %q{A Ruby interface for CouchDB}
   s.email = %q{email@robertsosinski.com}
-  s.extra_rdoc_files = ["CHANGELOG", "LICENSE", "README.markdown", "TODO", "lib/couch-client.rb", "lib/couch-client/attachment.rb", "lib/couch-client/attachment_list.rb", "lib/couch-client/collection.rb", "lib/couch-client/connection.rb", "lib/couch-client/connection_handler.rb", "lib/couch-client/consistent_hash.rb", "lib/couch-client/database.rb", "lib/couch-client/design.rb", "lib/couch-client/document.rb", "lib/couch-client/hookup.rb", "lib/couch-client/row.rb"]
-  s.files = ["CHANGELOG", "LICENSE", "Manifest", "README.markdown", "Rakefile", "TODO", "lib/couch-client.rb", "lib/couch-client/attachment.rb", "lib/couch-client/attachment_list.rb", "lib/couch-client/collection.rb", "lib/couch-client/connection.rb", "lib/couch-client/connection_handler.rb", "lib/couch-client/consistent_hash.rb", "lib/couch-client/database.rb", "lib/couch-client/design.rb", "lib/couch-client/document.rb", "lib/couch-client/hookup.rb", "lib/couch-client/row.rb", "spec/attachment_list_spec.rb", "spec/attachment_spec.rb", "spec/collection_spec.rb", "spec/conection_handler_spec.rb", "spec/connection_spec.rb", "spec/consistent_hash_spec.rb", "spec/couch-client_spec.rb", "spec/database_spec.rb", "spec/design_spec.rb", "spec/document_spec.rb", "spec/files/image.png", "spec/files/plain.txt", "spec/hookup_spec.rb", "spec/row_spec.rb", "spec/spec_helper.rb", "couch-client.gemspec"]
+  s.extra_rdoc_files = ["CHANGELOG", "LICENSE", "README.markdown", "TODO", "lib/couch-client.rb", "lib/couch-client/attachment.rb", "lib/couch-client/attachment_list.rb", "lib/couch-client/collection.rb", "lib/couch-client/connection.rb", "lib/couch-client/connection_handler.rb", "lib/couch-client/consistent_hash.rb", "lib/couch-client/database.rb", "lib/couch-client/design.rb", "lib/couch-client/document.rb", "lib/couch-client/hookup.rb", "lib/couch-client/rake_task.rb", "lib/couch-client/row.rb"]
+  s.files = ["CHANGELOG", "LICENSE", "Manifest", "README.markdown", "Rakefile", "TODO", "couch-client.gemspec", "lib/couch-client.rb", "lib/couch-client/attachment.rb", "lib/couch-client/attachment_list.rb", "lib/couch-client/collection.rb", "lib/couch-client/connection.rb", "lib/couch-client/connection_handler.rb", "lib/couch-client/consistent_hash.rb", "lib/couch-client/database.rb", "lib/couch-client/design.rb", "lib/couch-client/document.rb", "lib/couch-client/hookup.rb", "lib/couch-client/rake_task.rb", "lib/couch-client/row.rb", "spec/attachment_list_spec.rb", "spec/attachment_spec.rb", "spec/collection_spec.rb", "spec/conection_handler_spec.rb", "spec/connection_spec.rb", "spec/consistent_hash_spec.rb", "spec/couch-client_spec.rb", "spec/database_spec.rb", "spec/design_spec.rb", "spec/designs/create/people/fulltext/by_name/index.js", "spec/designs/create/people/validate_on_update.js", "spec/designs/create/people/views/all/map.js", "spec/designs/create/people/views/sum/map.js", "spec/designs/create/people/views/sum/reduce.js", "spec/designs/update/people/fulltext/by_name/index.js", "spec/designs/update/people/validate_on_update.js", "spec/designs/update/people/views/sum/map.js", "spec/designs/update/people/views/sum/reduce.js", "spec/document_spec.rb", "spec/files/image.png", "spec/files/plain.txt", "spec/hookup_spec.rb", "spec/rake_task_spec.rb", "spec/row_spec.rb", "spec/spec_helper.rb"]
   s.homepage = %q{http://github.com/robertsosinski/couch-client}
   s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Couch-client", "--main", "README.markdown"]
   s.require_paths = ["lib"]

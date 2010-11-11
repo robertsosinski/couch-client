@@ -87,7 +87,7 @@ module CouchClient
       code = easy.response_code
       
       # body is either a nil, a hash or a string containing attachment data.
-      body = if easy.body_str == "" || easy.body_str.nil?
+      body = if verb == :head
         # Head requests should return `nil`.
         nil
       # If the response is not a 200, then it must be JSON (as CouchDB returns all feedback as JSON), so parse it.
