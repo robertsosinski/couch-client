@@ -4,6 +4,7 @@ require 'json'
 module CouchClient
   class InvalidHTTPVerb < Exception; end
   class InvalidJSONData < Exception; end
+  class ConnectionFailed < Exception; end
 
   # Hookup is the basic HTTP interface that connects CouchClient to CouchDB.
   # Hookup can use any HTTP library if the conventions listed below are followed.
@@ -70,15 +71,28 @@ module CouchClient
         easy.userpwd  = handler.password
       end
       
+      # Setup error class with message
+      connection_error = lambda do
+        raise ConnectionFailed.new("could not connect to the database server at '#{handler.uri}'")
+      end
+      
       easy = case verb
       when :head, :get, :delete
         # head, get and delete http methods only take a uri string and options block
-        Curl::Easy.send("http_#{verb}", handler.uri(path, query), &options)
+        begin
+          Curl::Easy.send("http_#{verb}", handler.uri(path, query), &options)
+        rescue Curl::Err::ConnectionFailedError
+          connection_error.call
+        end
       when :post, :put
         # post and put http methods take a uri string, data string and options block
         # also convert the hash into json if the content_type of the request is json
         data = data.to_json if content_type == "application/json"
-        Curl::Easy.send("http_#{verb}", handler.uri(path, query), data, &options)
+        begin
+          Curl::Easy.send("http_#{verb}", handler.uri(path, query), data, &options)
+        rescue Curl::Err::ConnectionFailedError
+          connection_error.call
+        end
       else
         raise InvalidHTTPVerb.new("only `head`, `get`, `post`, `put` and `delete` are supported")
       end
