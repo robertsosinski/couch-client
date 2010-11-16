@@ -9,8 +9,16 @@ module CouchClient
     # Attachment is constructed with the id of the document it is attached to,
     # the filename, file stub and connection object.
     def initialize(id, name, stub, connection)
+      # Ensure that `revpos` and `length` fields are numbers, not strings, or couchdb will thow an error.
+      ["revpos", "length"].each do |field|
+        stub[field] &&= stub[field].to_i
+      end
+      
+      # Ensure that `stub` is a boolean, not a string, or couchdb will throw an error
+      stub["stub"] &&= true 
+      
       self.merge!(stub)
-
+      
       @id = id
       @name = name
       @connection = connection

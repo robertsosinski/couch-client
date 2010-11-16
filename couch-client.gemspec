@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Robert Sosinski"]
-  s.date = %q{2010-11-11}
+  s.date = %q{2010-11-16}
   s.description = %q{A Ruby interface for CouchDB}
   s.email = %q{email@robertsosinski.com}
   s.extra_rdoc_files = ["CHANGELOG", "LICENSE", "README.markdown", "TODO", "lib/couch-client.rb", "lib/couch-client/attachment.rb", "lib/couch-client/attachment_list.rb", "lib/couch-client/collection.rb", "lib/couch-client/connection.rb", "lib/couch-client/connection_handler.rb", "lib/couch-client/consistent_hash.rb", "lib/couch-client/database.rb", "lib/couch-client/design.rb", "lib/couch-client/document.rb", "lib/couch-client/hookup.rb", "lib/couch-client/rake_task.rb", "lib/couch-client/row.rb"]

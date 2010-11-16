@@ -42,6 +42,16 @@ describe CouchClient::Attachment do
     @couch.database.delete!
   end
   
+  describe '#initialize' do
+    it 'should typecast fields to the currect type' do
+      attachment = CouchClient::Attachment.new("123abc", "text.txt", {"content_type" => "text/plain", "revpos" => "3", "length" => "123", "stub" => "true"}, true)
+      attachment["content_type"].should eql("text/plain")
+      attachment["revpos"].should eql(3)
+      attachment["length"].should eql(123)
+      attachment["stub"].should be_true
+    end
+  end
+  
   describe '#uri' do
     it 'should yield the uri for the attachment' do
       @attachment_plain.uri.should eql([@couch.hookup.handler.uri, @alice.id, "plain.txt"].join("/"))

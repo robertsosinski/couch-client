@@ -15,7 +15,7 @@ require 'couch-client/rake_task' if defined?(Rake)
 
 # The CouchClient module is the overall container of all CouchClient logic.
 module CouchClient
-  VERSION = "0.1.0"
+  VERSION = "0.1.2"
   
   class Error < Exception; end
   

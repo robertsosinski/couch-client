@@ -4,7 +4,6 @@ Manifest
 README.markdown
 Rakefile
 TODO
-couch-client.gemspec
 lib/couch-client.rb
 lib/couch-client/attachment.rb
 lib/couch-client/attachment_list.rb
