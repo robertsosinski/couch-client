@@ -15,7 +15,7 @@ module CouchClient
       end
       
       # Ensure that `stub` is a boolean, not a string, or couchdb will throw an error
-      stub["stub"] &&= true 
+      stub["stub"] &&= !!stub["stub"]
       
       self.merge!(stub)
       

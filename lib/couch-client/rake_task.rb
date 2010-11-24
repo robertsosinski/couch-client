@@ -84,7 +84,7 @@ module CouchClient
         end
       end
       
-      recurser.call(@design_path)
+      recurser.call(design_path)
       
       # Get a set of id's that are currently saved and a set that are avaiable locally.
       saved_ids = saved_design_docs.map{|doc| doc["id"].gsub(/^_design\//, "")}.to_set
@@ -121,7 +121,7 @@ module CouchClient
         # If the new document is the same as what is on the server
         if old_doc == new_doc
           # Keep the old design document.
-          puts "Keeping:  #{new_doc.id} -- #{new_doc.rev}"
+          puts "Keeping:  #{old_doc.id} -- #{old_doc.rev}"
         else
           # Else save the new design docuemnt.
           if new_doc.save

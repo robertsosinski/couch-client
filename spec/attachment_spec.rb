@@ -43,7 +43,7 @@ describe CouchClient::Attachment do
   end
   
   describe '#initialize' do
-    it 'should typecast fields to the currect type' do
+    it 'should typecast fields to the correct type' do
       attachment = CouchClient::Attachment.new("123abc", "text.txt", {"content_type" => "text/plain", "revpos" => "3", "length" => "123", "stub" => "true"}, true)
       attachment["content_type"].should eql("text/plain")
       attachment["revpos"].should eql(3)
