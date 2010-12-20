@@ -206,7 +206,7 @@ Within the design path, you should format each design document with folders and 
     │   │   ├── html.js
     │   │   ├── json.js
     │   │   └── xml.js
-    │   ├── validate_on_update.js
+    │   ├── validate_doc_update.js
     │   └── views
     │       ├── all
     │       │   └── map.js
@@ -217,7 +217,7 @@ Within the design path, you should format each design document with folders and 
         ├── fulltext
         │   └── by_name
         │       └── index.js
-        ├── validate_on_update.js
+        ├── validate_doc_update.js
         └── views
             ├── all
             │   └── map.js
