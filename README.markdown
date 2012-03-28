@@ -256,3 +256,7 @@ Performing Database Administration
     # Delete the database
     Couch.databse.delete!
 
+Credits
+-------
+
+Built by [Robert Sosinski](http://www.robertsosinski.com) and open sourced with a [MIT license](http://github.com/robertsosinski/couch-client/blob/master/LICENSE).
